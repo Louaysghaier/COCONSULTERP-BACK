@@ -178,7 +178,7 @@ UserServiceIMP implements UserServiceInterface {
         }
         User user = new User(user1.getName(), user1.getUsername(), user1.getEmail(), passwordEncoder.encode(user1.getPassword()), false, user1.getAddress(), false);
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(RoleName.ROLE_Entreprise)
+        Role userRole = roleRepository.findByName(RoleName.Entreprise)
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(userRole);
         user.setRoles(roles);
@@ -213,7 +213,7 @@ UserServiceIMP implements UserServiceInterface {
         String token = UUID.randomUUID().toString().replace("-", "");
         User user1 = new User(user.getName(), user.getUsername(), user.getEmail(), passwordEncoder.encode(user.getPassword()), false, user.getAddress(), false);
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+        Role userRole = roleRepository.findByName(RoleName.ADMIN)
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(userRole);
         user1.setRoles(roles);

@@ -9,4 +9,5 @@ public interface RoleServiceInterface {
     void addRole(RoleName roleName);
     void deleteRole(RoleName roleName);
     List<Role> getAllRoles();
+    void AddALLRoles();
 }

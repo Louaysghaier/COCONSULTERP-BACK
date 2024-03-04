@@ -31,9 +31,13 @@ RoleServiceIMP roleServiceIMP;
     public List<Role> getAllRoles() {
         return roleServiceIMP.getAllRoles();
     }
+    @PostMapping("/AddALLRoles")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void AddALLRoles() {
+        roleServiceIMP.AddALLRoles();
+    }
 
-
-        /*
+/*
    @PutMapping("/deleteRole/{roleName}")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public void deleteRole(@PathVariable("roleName") RoleName roleName) {

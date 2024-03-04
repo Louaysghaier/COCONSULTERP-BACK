@@ -33,4 +33,10 @@ public class RoleServiceIMP implements RoleServiceInterface {
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
+    @Override
+    public void AddALLRoles(){
+        for (RoleName roleName:RoleName.values()){
+            addRole(roleName);
+        }
+    }
 }
