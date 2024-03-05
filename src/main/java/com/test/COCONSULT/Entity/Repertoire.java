@@ -20,13 +20,16 @@ public class Repertoire {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idContact ;
 
+    private String Contact ;
+
     @Enumerated(EnumType.STRING)
     private TypeContact typeContact ;
 
     @Enumerated(EnumType.STRING)
     private Priorite priorite ;
 
-    private int NumTel ;
+    private String NumTel ;
+
     private String email ;
 
 }

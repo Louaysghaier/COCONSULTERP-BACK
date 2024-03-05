@@ -1,6 +1,7 @@
 package com.test.COCONSULT.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.test.COCONSULT.DTO.EtapeContract;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +23,9 @@ public class Contract {
     private LocalDate DateContract ;
     private double Montant ;
     private int NbreTrnache ;
-    private String Etape ;
+
+    @Enumerated(EnumType.STRING)
+    private EtapeContract Etape ;
 
     @JsonIgnore
     @OneToMany (mappedBy = "contracts")
