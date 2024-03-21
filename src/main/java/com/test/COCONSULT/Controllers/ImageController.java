@@ -57,4 +57,21 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("image not uploaded");
         }
     }
-}
+
+
+        @PostMapping("/uploadpdf")
+        public String uploadFile(@RequestParam("file") MultipartFile file) {
+            if (file.isEmpty()) {
+                return "Please select a file to upload";
+            }
+
+            try {
+
+                String fileName = fileStorageService.storeFile(file);
+                return "File uploaded successfully: " + fileName;
+            } catch (Exception e) {
+                return "Failed to upload file: " + e.getMessage();
+            }
+        }
+    }
+

@@ -12,22 +12,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.Filter;
 
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-   private CorsConfigurationSource corsConfigurationSource;
-
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {
         return new JwtAuthTokenFilter();
     }
+
+
+    @Autowired
+   private CorsConfigurationSource corsConfigurationSource;
+
+
 
     private final String[] PUBLIC_ENDPOINTS={
 
@@ -59,8 +64,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
-
     @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .cors().configurationSource(corsConfigurationSource).and()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers("/refreshToken").permitAll() // Permit access to refreshToken endpoint
+                .antMatchers("/**").permitAll() // Require authentication for other endpoints
+                .and()
+                .httpBasic();
+
+        // Add JWT token filter before the default authentication filter
+        http.addFilterBefore((Filter) authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+   /* @Override
     protected void configure(HttpSecurity http) throws Exception {
    http
            .cors().configurationSource(corsConfigurationSource).and()
@@ -73,7 +93,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
            .anyRequest().authenticated()
            .and()
            .httpBasic();
-    }/*
+
+    }*/
+    /*@Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .cors().and()
+            .csrf().disable()
+            .authorizeRequests()
+                // Public endpoints accessible by anyone
+                .antMatchers(HttpMethod.POST, "/api/auth/signup/employee").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/signIn").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/works/sum_carbo_works").permitAll()
+                // Endpoints accessible only to specific roles
+                .antMatchers("/api/Bilan/**").hasAnyAuthority("ROLE_USER", "ADMIN", "Entreprise", "Employee", "Manager", "HR", "CRM", "Consult", "PM")
+                .antMatchers("/api/message/**").hasAnyAuthority("ROLE_USER", "ADMIN", "Entreprise", "Employee", "Manager", "HR", "CRM", "Consult", "PM")
+                .antMatchers("/api/Solution/**").hasAnyAuthority("ROLE_USER", "ADMIN", "Entreprise", "Employee", "Manager", "HR", "CRM", "Consult", "PM")
+                .antMatchers("/api/user/**").hasAnyAuthority("ADMIN", "Entreprise", "Manager", "HR", "CRM", "Consult", "PM")
+                // Add more endpoints and roles as needed
+                .anyRequest().authenticated()
+            .and()
+            .httpBasic();
+    }*/
+
+    /*
     @Bean
     public HttpFirewall httpFirewall() {
         DefaultHttpFirewall firewall = new DefaultHttpFirewall();

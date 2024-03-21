@@ -1,20 +1,41 @@
 package com.test.COCONSULT.JWT;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class JwtResponse {
     private String token;
     private String type = "access";
     private String username;
     private Collection<? extends GrantedAuthority> authorities;
+    private String refreshToken;
 
     public JwtResponse(String accessToken, String username, Collection<? extends GrantedAuthority> authorities) {
         this.token = accessToken;
         this.username = username;
         this.authorities = authorities;
     }
+
+    public JwtResponse(String newAccessToken, String newRefreshToken) {
+        this.token = newAccessToken;
+        this.refreshToken = newRefreshToken;
+    }
+
+    public JwtResponse(String s, String s1, String username, Collection<? extends GrantedAuthority> authorities) {
+        this.token = s;
+        this.refreshToken = s1;
+        this.username = username;
+        this.authorities = authorities;
+    }
+
 
     public String getAccessToken() {
         return token;

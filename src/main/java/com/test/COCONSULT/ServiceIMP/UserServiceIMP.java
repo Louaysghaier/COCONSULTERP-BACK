@@ -1,9 +1,11 @@
 package com.test.COCONSULT.ServiceIMP;
 
 
+import com.test.COCONSULT.DTO.ResetPass;
 import com.test.COCONSULT.DTO.RoleName;
 import com.test.COCONSULT.Entity.Role;
 import com.test.COCONSULT.Entity.User;
+import com.test.COCONSULT.Interfaces.OTPInterface;
 import com.test.COCONSULT.Interfaces.UserServiceInterface;
 import com.test.COCONSULT.Reposotories.RoleRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
@@ -35,7 +37,8 @@ UserServiceIMP implements UserServiceInterface {
     RoleRepository roleRepository;
     @Autowired
     LocalFileStorageService localFileStorageService;
-
+    @Autowired
+    OTPInterface otpInterface;
 
     public List<User> getAllUser() {
         return userRepository.findAll();
@@ -52,12 +55,10 @@ UserServiceIMP implements UserServiceInterface {
     }
 
     public User deleteUser(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            return null;
-        }
+        User user = userRepository.findById(id).orElse(null);
+        userRepository.delete(user);
+        return user;
+
     }
     public List<User> getAlluserprofiles() {
         List<User> users = userRepository.findAll();
@@ -116,7 +117,7 @@ UserServiceIMP implements UserServiceInterface {
         User user1 = user.get();
         String Newligne = System.getProperty("line.separator");
         String url = "http://localhost:4200/auth/verification/" + user1.getToken();
-        String body = "Soyez le bienvenue dans notre platforme ECOtalan  \n  veuillez utuliser ce lien là pour s'authentifier :" + Newligne + url + Newligne + "verification" +
+        String body = "Soyez le bienvenue dans notre platforme   \n  veuillez utuliser ce lien là pour s'authentifier :" + Newligne + url + Newligne + "verification" +
                 "Voici votre code de verfication  TN1122" ;
         if (user.isPresent()) {
 
@@ -148,7 +149,7 @@ UserServiceIMP implements UserServiceInterface {
         if (suser != null) {
             //String Newligne = System.getProperty("line.separator");
             String url = "http://localhost:4200/#/verification" ;
-            String verificationCode = "TN1122"; // Replace with your actual verification code
+            String verificationCode = otpInterface.GenerateOTp().getIdentification(); // Replace with your actual verification code
             String newLine = "<br/>"; // HTML line break
             String htmlMessage = "<div style='border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;'>"
                     + "Soyez le bienvenue dans notre plateforme" + newLine
@@ -171,7 +172,7 @@ UserServiceIMP implements UserServiceInterface {
 
     public ResponseEntity<User> registerEntreprise(User user1) {
         if (userRepository.existsByUsername(user1.getUsername())) {
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
         }
         if (userRepository.existsByEmail(user1.getEmail())) {
             return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
@@ -231,7 +232,65 @@ UserServiceIMP implements UserServiceInterface {
         }
         return userRepository.findByUsername(username);
     }
+public ResponseEntity<?> userforgetpassword(String email) {
+    Optional<User> user = userRepository.findByEmail(email);
+    if (user.isPresent()) {
+       // String url = "http://localhost:4200/#/verifCaptch" ;
+        String verificationCode = otpInterface.GenerateOTp().getIdentification();
+        String newLine = "<br/>"; // HTML line break
+        String htmlMessage = "<div style='border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;'>"
+                + "Une tentative de Reset du Password à été effectuer " + newLine
+                //+ "Veuillez utiliser ce lien pour vous authentifier : " + newLine
+              //  + "<a href='" + url + "'>" + url + "</a>" + newLine
+                + "<strong>Verification Code:</strong> " + verificationCode + newLine
+                + "</div>";
+        try {
+            mailSending.send(user.get().getEmail(), "Did you Forget your password ?"+ user.get().getName() , htmlMessage);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
 
+    public  ResponseEntity<?>  updatePassword(String username, ResetPass updatePasswordDto) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            String storedHashedPassword = user.get().getPassword();
+            if (passwordEncoder.matches(updatePasswordDto.getOldPassword(), storedHashedPassword)) {
+                user.get().setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+                userRepository.save(user.get());
+                return new ResponseEntity<>(HttpStatus.OK);
+
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
+    }
+    public  ResponseEntity<?>  updatePasswordBymail(String email, ResetPass updatePasswordDto) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+                Boolean verif = otpInterface.VerifOTP(updatePasswordDto.getCode());
+                if (verif == false) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+                else {
+                    user.get().setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+                    userRepository.save(user.get());
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
+    }
 }
 
 

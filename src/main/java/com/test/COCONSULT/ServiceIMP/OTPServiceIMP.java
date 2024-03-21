@@ -15,8 +15,9 @@ import java.util.Random;
 @AllArgsConstructor
 
 public class OTPServiceIMP implements OTPInterface {
-@Autowired
+    @Autowired
     OTPRepository otpRepository;
+
     @Override
     public OTP GenerateOTp() {
         // Generate a 6-digit OTP
@@ -34,18 +35,28 @@ public class OTPServiceIMP implements OTPInterface {
         otpRepository.save(otpObject);
         return otpObject;
     }
+
     @Override
-    public Boolean VerifOTP(OTP otp)  {
-        // Check if the OTP is expired
-        Date now = new Date();
-        if (otp.getExpiredDate().before(now)) {
-            return false;
+    public Boolean VerifOTP(String identification) {
+        // Retrieve the OTP object from the repository based on the identification
+        OTP otp = otpRepository.findByIdentification(identification);
+
+        // Check if the OTP object is null (i.e., not found)
+        if (otp == null) {
+            return false; // OTP does not exist, so it's invalid
         }
 
-        // Check if the OTP is valid
-          return otpRepository.findByIdentificationAndExpiredDateAfter(otp.getIdentification(), now).isPresent();
+        // Get the expiration date of the OTP
+        Date expiredDate = otp.getExpiredDate();
 
+        // Get the current date and time
+        Date now = new Date();
+
+        // Check if the current date and time is before the expiration date
+        return now.before(expiredDate);
     }
+
+
     @Override
     public OTP ResendOTP(OTP existingOTP) {
         // Check if the existing OTP has expired
@@ -59,5 +70,8 @@ public class OTPServiceIMP implements OTPInterface {
         }
     }
 
-
+    @Override
+    public void DeleteALLOTP() {
+        otpRepository.deleteAll();
+    }
 }
