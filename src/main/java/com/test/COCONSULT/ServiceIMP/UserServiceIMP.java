@@ -124,7 +124,7 @@ UserServiceIMP implements UserServiceInterface {
             user1.setValid(true);
             this.userRepository.save(user1);
             try {
-                mailSending.send(user1.getEmail(), "Welcome Provaider", body);
+                mailSending.send(user1.getEmail(), "Welcome ", body);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -145,6 +145,8 @@ UserServiceIMP implements UserServiceInterface {
         roles.add(userRole);
         user.setRoles(roles);
         user.setValid(true);
+        user.setAddress(user1.getAddress());
+        user.setNumber(user1.getNumber());
         User suser = userRepository.save(user);
         if (suser != null) {
             //String Newligne = System.getProperty("line.separator");

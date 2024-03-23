@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -58,6 +60,16 @@ public class AuthRestAPIs {
     JwtAuthTokenFilter jwtAuthTokenFilter;
     @PostMapping("/signIn")
     public ResponseEntity<JwtResponse> authenticateUser(@RequestBody SignIn login, HttpServletRequest request) {
+        Optional<User> userByEmail = userRepository.findByEmail(login.getEmail());
+        Optional<User> userByUsername = userRepository.findByUsername(login.getEmail());
+
+        // Combine the results from both searches
+        Optional<User> user = userByEmail.isPresent() ? userByEmail : userByUsername;
+
+        if(user.get().isBlocked()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
