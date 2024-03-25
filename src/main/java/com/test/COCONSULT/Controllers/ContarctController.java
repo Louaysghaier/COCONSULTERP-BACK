@@ -1,6 +1,5 @@
 package com.test.COCONSULT.Controllers;
 
-import com.test.COCONSULT.Entity.ActivitySalesTeam;
 import com.test.COCONSULT.Entity.Contract;
 import com.test.COCONSULT.Interfaces.ContractService;
 import lombok.AllArgsConstructor;
@@ -31,7 +30,7 @@ public class ContarctController{
         }
     }
     @PostMapping("/ajouterContract")
-    public Contract addContrat(@RequestBody Contract contract) {
+    public Contract addContrat(@RequestBody Contract contract ) {
         return contractService.addContract(contract);
 
     }
@@ -55,4 +54,3 @@ public class ContarctController{
     }
 
 }
-

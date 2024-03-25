@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class Repertoire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idContact ;
+    private Long idRepertoire ;
 
     private String Contact ;
 

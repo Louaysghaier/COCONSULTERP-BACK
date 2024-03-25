@@ -39,7 +39,7 @@ public class RepertoireController {
 
     @PutMapping("/updateRepertoire/{id}")
     public ResponseEntity<Repertoire> updateRepertoire(@PathVariable("id") Long idContact, @RequestBody Repertoire repertoire) {
-        repertoire.setIdContact(idContact); // Set the ID from the path variable
+        repertoire.setIdRepertoire(idContact); // Set the ID from the path variable
         Repertoire updatedrepetoire = repertoireService.updateRepertoire(repertoire);
         if (updatedrepetoire != null) {
             return ResponseEntity.ok(updatedrepetoire);

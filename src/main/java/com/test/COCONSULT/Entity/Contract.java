@@ -30,8 +30,8 @@ public class Contract {
     @JsonIgnore
     @OneToMany (mappedBy = "contracts")
     private List<Payment> payments ;
-    //@JsonIgnore
-   // @ManyToOne
-    // private Projets projets ;
 
+    @OneToOne
+    @JoinColumn(name = "repertoire_id", referencedColumnName = "idRepertoire")
+    private Repertoire repertoire;
 }
