@@ -88,7 +88,7 @@ UserServiceIMP implements UserServiceInterface {
         String body = "compte bloque\n  use this link to verify your account is :" + Newligne + url;
         if (user.isPresent()) {
 
-            user1.setValid(false);
+            user1.setBlocked(true);
             this.userRepository.save(user1);
             try {
                 mailSending.send(user1.getEmail(), "bloque ", body);
@@ -117,11 +117,11 @@ UserServiceIMP implements UserServiceInterface {
         User user1 = user.get();
         String Newligne = System.getProperty("line.separator");
         String url = "http://localhost:4200/auth/verification/" + user1.getToken();
-        String body = "Soyez le bienvenue dans notre platforme   \n  veuillez utuliser ce lien là pour s'authentifier :" + Newligne + url + Newligne + "verification" +
-                "Voici votre code de verfication  TN1122" ;
+        String body = "Votre compte est Activer avec succes Soyez le bienvenue dans notre platforme   \n  veuillez utuliser ce lien là pour s'authentifier :" + Newligne + url + Newligne + "verification"
+               ;
         if (user.isPresent()) {
 
-            user1.setValid(true);
+            user1.setBlocked(true);
             this.userRepository.save(user1);
             try {
                 mailSending.send(user1.getEmail(), "Welcome ", body);

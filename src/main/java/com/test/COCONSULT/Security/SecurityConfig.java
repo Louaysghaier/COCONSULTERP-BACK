@@ -1,5 +1,6 @@
 package com.test.COCONSULT.Security;
 
+import com.test.COCONSULT.JWT.JwtAuthEntryPoint;
 import com.test.COCONSULT.JWT.JwtAuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
@@ -23,12 +25,19 @@ import javax.servlet.Filter;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {
         return new JwtAuthTokenFilter();
     }
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return jwtAuthEntryPoint;
 
 
+    }
+    @Autowired
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
     @Autowired
    private CorsConfigurationSource corsConfigurationSource;
 
@@ -62,23 +71,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-resources",
             "/configuration/security",
             "/v3/api-docs/**",
-            "/swagger-ui/**"
-    };
+            "/swagger-ui/**",
+             "/refreshToken"    };
     @Override
+
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().configurationSource(corsConfigurationSource).and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/refreshToken").permitAll() // Permit access to refreshToken endpoint
-                .antMatchers("/**").permitAll() // Require authentication for other endpoints
+                .antMatchers("/api/auth/refreshToken").permitAll() // Permit access to refreshToken endpoint
+
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated() // Require authentication for any other endpoint
+
                 .and()
                 .httpBasic();
-
-        // Add JWT token filter before the default authentication filter
-        http.addFilterBefore((Filter) authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                
+                 http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+               .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
     }
+
+
+
 
    /* @Override
     protected void configure(HttpSecurity http) throws Exception {

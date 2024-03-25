@@ -6,6 +6,7 @@ import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.JWT.JwtAuthTokenFilter;
 import com.test.COCONSULT.JWT.JwtProvider;
 import com.test.COCONSULT.JWT.JwtResponse;
+import com.test.COCONSULT.JWT.NewTokensResponses;
 import com.test.COCONSULT.Reposotories.RoleRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
 import com.test.COCONSULT.ServiceIMP.UserServiceIMP;
@@ -77,7 +78,7 @@ public class AuthRestAPIs {
 
         List <String> jwt = jwtProvider.generateJwtTokens(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return ResponseEntity.ok(new JwtResponse(jwt.get(0),jwt.get(1), userDetails.getUsername(), userDetails.getAuthorities()));
+        return ResponseEntity.ok(new JwtResponse(jwt.get(0),jwt.get(1), userDetails.getUsername(),user.get().getId(), userDetails.getAuthorities()));
     }
 
 
@@ -96,31 +97,16 @@ public class AuthRestAPIs {
 
     @PostMapping("/refreshToken")
     public ResponseEntity<?> refreshToken( HttpServletRequest request) {
-        String refreshToken = extractRefreshToken(request);
+        String refreshToken = jwtAuthTokenFilter.extractRefreshToken(request);
         if (refreshToken != null && jwtAuthTokenFilter.isValidRefreshToken(refreshToken)) {
             String newAccessToken = jwtAuthTokenFilter.issueNewAccessToken(refreshToken);
-            String newRefreshToken = jwtProvider.generateRefreshToken();
-            return ResponseEntity.ok(new JwtResponse(newAccessToken, newRefreshToken));
+           // String newRefreshToken = jwtProvider.generateRefreshToken();
+            return ResponseEntity.ok(new NewTokensResponses(refreshToken, newAccessToken));
         } else {
-            return ResponseEntity.badRequest().body("Invalid or expired refresh token");
+            return ResponseEntity.badRequest().body("expired refresh token");
         }
     }
-    private String extractRefreshToken(HttpServletRequest request) {
-        // Retrieve the refresh token from the request attributes or parameters
-        String refreshToken = request.getParameter("refreshToken");
-        if (refreshToken != null && !refreshToken.isEmpty()) {
-            return refreshToken;
-        } else {
-            // If the refresh token is not found in parameters, try retrieving it from headers
-            refreshToken = request.getHeader("Authorization");
-            if (refreshToken != null && refreshToken.startsWith("access ")) {
-                // Extract the token from the Authorization header
-                refreshToken = refreshToken.substring(7);
-                return refreshToken;
-            }
-        }
-        return null; // Return null if refresh token is not found in both parameters and headers
-    }
+
 
     @RequestMapping(value = "/signup/employee/{roleName}", method = RequestMethod.POST)
     public ResponseEntity<User> registerUser(@Validated @RequestBody User user1,@PathVariable ("roleName")String roleName) {
