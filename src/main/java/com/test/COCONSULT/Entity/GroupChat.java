@@ -24,7 +24,7 @@ public class GroupChat {
     @OneToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "role_id")
-    @JsonIgnore
+  //  @JsonIgnore
     private Role role;
 
 
@@ -33,7 +33,7 @@ public class GroupChat {
     @JoinTable(name = "group_chat_users",
             joinColumns = @JoinColumn(name = "group_chat_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @JsonIgnore
+   // @JsonIgnore
     private Set<User> users = new HashSet<>();
 
 }

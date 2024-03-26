@@ -59,41 +59,7 @@ public class JwtAuthTokenFilter implements Filter {
     }
 
 
-   /* @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
-        try {
 
-            String jwt = getJwt(request);
-            if (jwt!=null && tokenProvider.validateJwtToken(jwt)) {
-                String username = tokenProvider.getUserNameFromJwtToken(jwt);
-
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication
-                        = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (Exception e) {
-            logger.error("Can NOT set user authentication -> Message: {}", e);
-        }
-
-        filterChain.doFilter(request, response);
-    }
-
-    private String getJwt(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-
-        if (authHeader != null && authHeader.startsWith("access")) {
-            return authHeader.replace("access","");
-        }
-
-        return null;
-    }*/
-    
     // Modify JwtAuthTokenFilter to handle refresh tokens from session
     public String getJwt(HttpServletRequest request, HttpSession session) {
     // Check for access token
@@ -162,11 +128,14 @@ public class JwtAuthTokenFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
-
+/*
         Set<String> excludedUrls = new HashSet<>();
+        excludedUrls.add("/api/user/forgetpass");
         excludedUrls.add("/api/auth/");
         excludedUrls.add("/OTP/");
+        excludedUrls.add("/Msg");
         excludedUrls.add("/api/auth/refreshToken");
+
 
         String requestUri = httpRequest.getRequestURI();
         boolean isExcluded = false;
@@ -198,7 +167,7 @@ public class JwtAuthTokenFilter implements Filter {
             // Handle other exceptions if needed
             e.printStackTrace();
         }
-
+*/
         chain.doFilter(request, response);
     }
 

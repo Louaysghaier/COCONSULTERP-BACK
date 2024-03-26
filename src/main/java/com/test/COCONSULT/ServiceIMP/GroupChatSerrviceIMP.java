@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 @Service
 @AllArgsConstructor
@@ -140,5 +141,8 @@ public class GroupChatSerrviceIMP implements GroupChatInterface {
         return groupChat;
     }
 
-
+@Transactional
+    public List<GroupChat> getAllGroupChats() {
+        return groupChatRepository.findAll();
+    }
 }

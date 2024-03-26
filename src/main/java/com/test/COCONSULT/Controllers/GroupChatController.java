@@ -35,6 +35,10 @@ public class GroupChatController {
     public List<GroupChat> getAllGroupChatsByRole(@PathVariable ("roleName") RoleName roleName) {
         return groupchatserrviceimp.getAllGroupChatsByRole(roleName);
     }
+@GetMapping("/getAllGroupChats")
+    public List<GroupChat> getAllGroupChats() {
+        return groupchatserrviceimp.getAllGroupChats();
+    }
     @GetMapping("/getGroupChatById/{groupId}")
 
     public GroupChat getGroupChatById(@PathVariable ("groupId") Long groupId) {

@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-public class ImageController {
+public class FileStorageController {
     @Autowired
     private FileStorageService fileStorageService;
 
@@ -44,7 +44,9 @@ public class ImageController {
         // Return the image bytes along with appropriate headers
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
-    @PostMapping("uploadimage")
+    //@PostMapping("uploadimage")
+    @PostMapping(value = "/uploadimage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
     public ResponseEntity<?> uploadImage(@RequestPart("image") MultipartFile file) {
 
 
@@ -59,8 +61,10 @@ public class ImageController {
     }
 
 
-        @PostMapping("/uploadpdf")
-        public String uploadFile(@RequestParam("file") MultipartFile file) {
+       // @PostMapping("/uploadpdf")
+       @PostMapping(value = "/uploadpdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
+       public String uploadFile(@RequestParam("file") MultipartFile file) {
             if (file.isEmpty()) {
                 return "Please select a file to upload";
             }
