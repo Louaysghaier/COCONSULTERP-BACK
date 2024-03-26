@@ -5,12 +5,20 @@ import com.test.COCONSULT.Interfaces.FileStorageService;
 
 import com.test.COCONSULT.Reposotories.ContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.*;
 import java.io.IOException;
-import java.io.InputStream;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 public class PdfController {
@@ -24,25 +32,45 @@ public class PdfController {
         this.fileStorageService = fileStorageService;
     }
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
+    @GetMapping("/pdfs/{pdfName:.+}")
+    public ResponseEntity<byte[]> getPdf(@PathVariable String pdfName) throws IOException {
+        // Construct the full path to the PDF file
+        Path pdfPath = Paths.get(uploadDir, pdfName);
+
+        // Read the PDF bytes from the file
+        byte[] pdfBytes = Files.readAllBytes(pdfPath);
+
+        // Determine the MIME type of the PDF based on its file extension
+        String contentType = Files.probeContentType(pdfPath);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(contentType));
+
+        // Return the PDF bytes along with appropriate headers
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/upload")
-    public String uploadFile(@RequestPart("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return "Please select a file to upload";
+            return ResponseEntity.badRequest().body("Please select a file to upload");
         }
 
         try {
-            // Store the file and get the file name
             String fileName = fileStorageService.storeFile(file);
-            //Contract contract = new Contract();
-            // Set email provided by the user
-            //contract.setDescription(fileName);
-            // Set other properties of Candidat as needed
 
+            // Enregistrer le fichier dans la base de données avec son nom
+            Contract contract = new Contract();   // lezim naamel haka bch yetsajjel bessmou fil base de données
+            contract.setDescription(fileName);
             //contractRepository.save(contract);
-            return "File uploaded successfully: " + fileName;
-        } catch (Exception e) {
-            return "Failed to upload file: " + e.getMessage();
-        }
 
+            return ResponseEntity.ok().body("File uploaded successfully: " + fileName);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upload file: " + e.getMessage());
+        }
     }
+
 }
