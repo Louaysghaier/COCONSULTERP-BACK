@@ -6,8 +6,10 @@ import com.test.COCONSULT.Interfaces.ProspectService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("Prospect")
 @RestController
@@ -52,5 +54,11 @@ public class ProspectController {
     public ResponseEntity<Void> removeProspect(@PathVariable("id") Long idProspect) {
         prospectService.removeProspect(idProspect);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/upload-prospects-data")
+    public ResponseEntity<?> uploadProspectsData(@RequestParam("file") MultipartFile file){
+        this.prospectService.saveProspectsToDatabase(file);
+        return ResponseEntity.ok(Map.of("Message" , "Prospects data uploaded and saved to database successfully"));
     }
 }

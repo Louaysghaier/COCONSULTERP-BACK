@@ -2,6 +2,7 @@ package com.test.COCONSULT.Interfaces;
 
 import com.test.COCONSULT.Entity.Payment;
 import com.test.COCONSULT.Entity.Prospect;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface ProspectService {
     Prospect retrieveProspect(Long idProspect);
 
     void removeProspect(Long idProspect);
+
+    void saveProspectsToDatabase(MultipartFile file)  ;
 }

@@ -4,9 +4,12 @@ import com.test.COCONSULT.Entity.Payment;
 import com.test.COCONSULT.Entity.Prospect;
 import com.test.COCONSULT.Interfaces.ProspectService;
 import com.test.COCONSULT.Reposotories.ProspectRepository;
+import com.test.COCONSULT.Services.ExcelProspectUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,5 +44,17 @@ public class ProspectImpl implements ProspectService {
     @Override
     public void removeProspect(Long idProspect) {
         prospectRepository.deleteById(idProspect);
+    }
+
+    @Override
+    public void saveProspectsToDatabase(MultipartFile file){
+        if(ExcelProspectUploadService.isValidExcelFile(file)){
+            try {
+                List<Prospect> prospects = ExcelProspectUploadService.getProspectsDataFromExcel(file.getInputStream());
+                this.prospectRepository.saveAll(prospects);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("The file is not a valid excel file");
+            }
+        }
     }
 }
