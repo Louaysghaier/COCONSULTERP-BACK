@@ -1,13 +1,12 @@
 package com.test.COCONSULT.Entity;
 
 
+import com.test.COCONSULT.DTO.Priorite;
+import com.test.COCONSULT.DTO.ProspectStatus;
 import lombok.*;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 
@@ -22,10 +21,14 @@ public class Prospect {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProspect ;
-    private String Entreprise ;
+
+    private String Name  ;
+    private String Title ;
     private String Email ;
     private String NumTel ;
-    private LocalDate Date ;
+
+    @Enumerated(EnumType.STRING)
+    private ProspectStatus Status ;
 
 
 

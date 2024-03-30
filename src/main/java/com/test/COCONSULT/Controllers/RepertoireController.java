@@ -1,6 +1,7 @@
 package com.test.COCONSULT.Controllers;
 
 import com.test.COCONSULT.Entity.Contract;
+import com.test.COCONSULT.Entity.Prospect;
 import com.test.COCONSULT.Entity.Repertoire;
 import com.test.COCONSULT.Interfaces.RepertoireService;
 import lombok.AllArgsConstructor;
@@ -53,5 +54,11 @@ public class RepertoireController {
     public ResponseEntity<Void> removeRepertoire(@PathVariable("id") Long idContact) {
         repertoireService.removeRepertoire(idContact);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/createRepertoireFromProspect")
+    public ResponseEntity<Repertoire> createRepertoireFromProspect(@RequestBody Prospect prospect) {
+        Repertoire repertoire = repertoireService.createRepertoireFromProspect(prospect);
+        return ResponseEntity.ok(repertoire);
     }
 }

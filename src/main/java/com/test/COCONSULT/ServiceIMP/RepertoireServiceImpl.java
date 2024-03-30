@@ -1,6 +1,9 @@
 package com.test.COCONSULT.ServiceIMP;
 
+import com.test.COCONSULT.DTO.Priorite;
+import com.test.COCONSULT.DTO.TypeContact;
 import com.test.COCONSULT.Entity.Contract;
+import com.test.COCONSULT.Entity.Prospect;
 import com.test.COCONSULT.Entity.Repertoire;
 import com.test.COCONSULT.Interfaces.RepertoireService;
 import com.test.COCONSULT.Reposotories.RepertoireRepository;
@@ -35,6 +38,19 @@ public class RepertoireServiceImpl implements RepertoireService {
     public Repertoire retrieveRepertoire(Long idContact) {
         Optional<Repertoire> RepertoireOptional = repertoireRepository.findById(idContact);
         return RepertoireOptional.orElse(null);
+    }
+
+    @Override
+    public Repertoire createRepertoireFromProspect(Prospect prospect) {
+        Repertoire repertoire = new Repertoire();
+        repertoire.setContact(prospect.getName());
+        repertoire.setEmail(prospect.getEmail());
+        repertoire.setNumTel(prospect.getNumTel());
+        repertoire.setTypeContact(TypeContact.QUALIFIED_LEAD);
+        repertoire.setPriorite(Priorite.FAIBLE);
+
+
+        return repertoireRepository.save(repertoire);
     }
 
     @Override
