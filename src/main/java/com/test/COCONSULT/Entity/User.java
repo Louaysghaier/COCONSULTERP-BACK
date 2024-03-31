@@ -29,6 +29,7 @@ public class User {
     private String token;
     private boolean bannedchatGP;
     private String image;
+    private boolean addedtoGPChat;
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "users")
@@ -42,7 +43,7 @@ public class User {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
+    //@JsonIgnore
 
     private Set <Role> roles = new HashSet<>();
 

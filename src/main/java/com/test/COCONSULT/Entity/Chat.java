@@ -19,8 +19,8 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+
+    private Date date=new Date();
     private String message;
     @Enumerated(EnumType.STRING)
     private MessageType type;

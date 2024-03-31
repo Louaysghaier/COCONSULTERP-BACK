@@ -15,13 +15,17 @@ import java.util.List;
 public class GroupChatController {
     @Autowired
     GroupChatSerrviceIMP groupchatserrviceimp;
-@PutMapping("/createGroupChat/{roleName}")
+@PostMapping("/createGroupChat/{roleName}")
     public GroupChat createGroupChat(@PathVariable ("roleName") RoleName roleName,@RequestBody GroupChat groupChat) {
         return groupchatserrviceimp.createGroupChat(roleName, groupChat);
     }
+@PostMapping ("/createGP")
+    public GroupChat createGP(@RequestBody GroupChat groupChat) {
+        return groupchatserrviceimp.createGP(groupChat);
+    }
 @PutMapping("/addUserToGroupChatByRole/{IdGroupChat}/{IdUser}")
-    public Void addUserToGroupChatByRole(@PathVariable Long IdGroupChat,@PathVariable  Long IdUser) {
-        return groupchatserrviceimp.addUserToGroupChatByRole(IdGroupChat, IdUser);
+    public Void addUserToGroupChatByRole(@PathVariable Long IdGroupChat,@PathVariable List <Long>  IdUser) {
+        return groupchatserrviceimp.addUserToGroupChatByRole(IdGroupChat,IdUser );
     }
 @DeleteMapping("/removeUserFromGroupChat")
     public GroupChat removeUserFromGroupChat(@RequestBody GroupChat groupChat,@RequestBody User user) {
@@ -44,10 +48,10 @@ public class GroupChatController {
     public GroupChat getGroupChatById(@PathVariable ("groupId") Long groupId) {
         return groupchatserrviceimp.getGroupChatById(groupId);
     }
-    @PostMapping("/banneduser/{groupId}/{banneduser}")
+    @PostMapping("/banneduser/{banneduser}")
 
-    public User banneduser(@PathVariable ("groupId") Long groupid,@PathVariable ("banneduser") Long banneduser) {
-        return groupchatserrviceimp.banneduser(groupid, banneduser);
+    public User banneduser(@PathVariable ("banneduser") Long banneduser) {
+        return groupchatserrviceimp.banneduser( banneduser);
     }
 @DeleteMapping("/deleteGroupChat/{groupId}")
     public GroupChat deleteGroupChat(@PathVariable ("groupId") Long groupId) {
@@ -58,4 +62,6 @@ public class GroupChatController {
     public User removeban(@PathVariable ("iduser") Long iduser) {
         return groupchatserrviceimp.removeban(iduser);
     }
+  @GetMapping("/getavailableusers")
+    public List<User>getavailableusers(){return groupchatserrviceimp.getavailableusers();}
 }

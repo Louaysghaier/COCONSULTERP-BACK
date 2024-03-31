@@ -50,6 +50,9 @@ public class ChatServiceIMP implements ChatInterface {
         if (!groupChat.getUsers().contains(sender)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sender is not a member of the group chat");
         }
+        if(sender.isBannedchatGP()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sender is banned from the group chat");
+        }
 
         // Create a new chat message
         Chat chat = new Chat();
@@ -78,10 +81,10 @@ public class ChatServiceIMP implements ChatInterface {
         return chatRepository.findAllByGroupChatId(idgroupChat);
     }
 
-    Set<Long> broadcastedGroupChats=new HashSet<>();
 
     @Override
     public void broadcastMessageToGroupChats(String message) {
+        Set<Long> broadcastedGroupChats=new HashSet<>();
 
         List<Chat> chats = chatRepository.findAll();
         for (Chat chat : chats) {

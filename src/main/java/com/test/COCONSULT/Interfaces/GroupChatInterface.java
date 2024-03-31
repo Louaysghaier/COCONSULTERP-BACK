@@ -10,7 +10,7 @@ public interface GroupChatInterface {
 
     GroupChat createGroupChat(RoleName roleName, GroupChat groupChat);
 
-    Void addUserToGroupChatByRole(Long IdGroupChat, Long IdUser);
+    Void addUserToGroupChatByRole(Long IdGroupChat, List<Long> IdUser);
     GroupChat removeUserFromGroupChat(GroupChat groupChat, User user);
 
     GroupChat updateGroupChat(Long groupId, String groupTitle, String rules);
@@ -20,6 +20,6 @@ public interface GroupChatInterface {
     List<GroupChat> getAllGroupChatsByRole(RoleName roleName);
 
     GroupChat getGroupChatById( Long groupId);
-    User banneduser(Long groupid,Long banneduser);
+    User banneduser(Long banneduser);
     User removeban(Long iduser);
 }

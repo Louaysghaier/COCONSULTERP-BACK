@@ -20,7 +20,7 @@ public class AdminMsg {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+
     private Date date=new Date();
     private String email;
     private String nom;

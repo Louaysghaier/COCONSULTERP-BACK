@@ -19,7 +19,7 @@ public class Notification {
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private Date date=new Date();
     private String title;
     @OneToOne
     private AdminMsg adminMsgId; // Reference to the associated AdminMsg
