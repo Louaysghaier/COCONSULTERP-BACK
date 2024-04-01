@@ -14,4 +14,5 @@ public class CandidatDetailsDTO {
     private String candidatEmail;
     private String jobOpportTitle;
     private double finalMark;
+    private String pdfFile;
 }

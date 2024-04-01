@@ -4,6 +4,7 @@ import com.test.COCONSULT.Entity.Qestion;
 import com.test.COCONSULT.Entity.Quiz;
 import com.test.COCONSULT.Interfaces.QuizServiceInterface;
 import com.test.COCONSULT.Reposotories.QuizRepository;
+import com.test.COCONSULT.ServiceIMP.QuizServiceImp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class QuizController {
 
     @Autowired
     private QuizServiceInterface quizServiceInterface;
+    @Autowired
+    private QuizServiceImp quizServiceImp;
     @Autowired
     QuizRepository quizRepository;
 
@@ -62,7 +65,15 @@ public class QuizController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @GetMapping("/random")
+    public ResponseEntity<Quiz> getRandomQuiz() {
+        Quiz randomQuiz = quizServiceImp.getRandomQuiz();
+        if (randomQuiz != null) {
+            return new ResponseEntity<>(randomQuiz, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @GetMapping("/questions/{id}/{mailcandidat}")
     public ResponseEntity<List<Qestion>> getQuestionsForQuiz(@PathVariable ("id") int id,@PathVariable ("mailcandidat") String mailcandidat) {
 

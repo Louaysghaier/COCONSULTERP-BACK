@@ -11,6 +11,8 @@ import com.test.COCONSULT.Services.MailSenderService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 public class PdfController {
@@ -43,6 +48,38 @@ public class PdfController {
     public PdfController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
 
+    }
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
+    @GetMapping("/{candidatId}/pdf")
+    public ResponseEntity<byte[]> getPdfForCandidat(@PathVariable int candidatId) throws IOException {
+        // Récupérer le candidat par ID depuis le service
+        Candidat candidat = candidatServiceInterface.getCandidatById(candidatId);
+
+        // Vérifier si le candidat existe
+        if (candidat == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Récupérer le nom du fichier PDF du candidat
+        String pdfFileName = candidat.getPdfFile();
+
+        // Construire le chemin complet vers le fichier PDF
+        Path pdfPath = Paths.get(uploadDir, pdfFileName);
+
+        // Lire les octets du PDF depuis le fichier
+        byte[] pdfBytes = Files.readAllBytes(pdfPath);
+
+        // Déterminer le type MIME du PDF en fonction de son extension de fichier
+        String contentType = Files.probeContentType(pdfPath);
+
+        // Configurer les en-têtes HTTP
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(contentType));
+
+        // Retourner les octets PDF avec les en-têtes appropriés
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 
     @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

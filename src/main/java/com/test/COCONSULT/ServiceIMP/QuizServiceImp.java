@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -100,5 +101,15 @@ public class QuizServiceImp implements QuizServiceInterface {
 
         // Supprimer le quiz (et les questions associées seront supprimées automatiquement en cascade)
         quizRepository.delete(quizToDelete);
+    }
+    public Quiz getRandomQuiz() {
+        List<Quiz> allQuizzes = quizRepository.findAll(); // Récupérer tous les quizzes depuis la base de données
+
+        // Générer un index aléatoire pour choisir un quiz aléatoire dans la liste
+        Random random = new Random();
+        int randomIndex = random.nextInt(allQuizzes.size());
+
+        // Récupérer et retourner le quiz aléatoire
+        return allQuizzes.get(randomIndex);
     }
 }
