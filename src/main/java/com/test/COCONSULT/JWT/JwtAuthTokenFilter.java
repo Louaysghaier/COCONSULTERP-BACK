@@ -160,7 +160,7 @@ public class JwtAuthTokenFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
+     /*   HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
 
         Set<String> excludedUrls = new HashSet<>();
@@ -197,7 +197,7 @@ public class JwtAuthTokenFilter implements Filter {
         } catch (Exception e) {
             // Handle other exceptions if needed
             e.printStackTrace();
-        }
+        }*/
 
         chain.doFilter(request, response);
     }

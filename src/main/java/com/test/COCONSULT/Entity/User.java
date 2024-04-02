@@ -23,7 +23,7 @@ public class User {
     private String email;
     private String password;
     private String address;
-    private int number;
+    private String  number;
     private boolean blocked;
     private boolean valid;
     private String token;

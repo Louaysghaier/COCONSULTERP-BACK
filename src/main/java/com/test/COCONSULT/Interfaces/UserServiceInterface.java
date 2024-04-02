@@ -25,6 +25,7 @@ public interface UserServiceInterface {
 
     public void updateUser(Long id);
 
+
     public void validInscription(Long id) ;
 
     public ResponseEntity<User> registerUser(User user1, String roleName);

@@ -32,6 +32,12 @@ UserServiceIMP userServiceIMP;
     public List<User> ListUser() {
         return userServiceIMP.getAllUser();
     }
+    @GetMapping("/getUserById/{idUser}")
+    public User getUserById(@PathVariable("idUser") Long idUser) {
+        return userServiceIMP.getUserById(idUser);
+    }
+
+
 
     @PutMapping("/validate-user/{idUser}")
     @PreAuthorize("hasRole('ADMIN')")
