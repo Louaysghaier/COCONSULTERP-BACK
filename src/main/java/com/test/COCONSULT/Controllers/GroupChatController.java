@@ -64,4 +64,9 @@ public class GroupChatController {
     }
   @GetMapping("/getavailableusers")
     public List<User>getavailableusers(){return groupchatserrviceimp.getavailableusers();}
+
+    @GetMapping("/getGroupChatByuser/{iduser}")
+    public GroupChat getGroupChatByuser(@PathVariable ("iduser") Long iduser) {
+        return groupchatserrviceimp.getGroupChatByuser(iduser);
+    }
 }

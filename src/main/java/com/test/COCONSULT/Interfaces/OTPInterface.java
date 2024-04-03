@@ -7,7 +7,7 @@ import java.net.http.HttpTimeoutException;
 public interface OTPInterface {
     OTP GenerateOTp( );
     Boolean VerifOTP ( String identification )  ;
-
-    OTP ResendOTP(OTP existingOTP);
+    void userstatus(String emailuser, Boolean result);
+    OTP ResendOTP(String email);
     void  DeleteALLOTP();
 }

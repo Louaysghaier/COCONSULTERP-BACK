@@ -1,15 +1,21 @@
 package com.test.COCONSULT.ServiceIMP;
 
 import com.test.COCONSULT.DTO.OTP;
+import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.Interfaces.OTPInterface;
 import com.test.COCONSULT.Reposotories.OTPRepository;
+import com.test.COCONSULT.Reposotories.UserRepository;
+import com.test.COCONSULT.Services.MailSenderService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.http.HttpTimeoutException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Random;
 @Service
 @AllArgsConstructor
@@ -17,7 +23,10 @@ import java.util.Random;
 public class OTPServiceIMP implements OTPInterface {
     @Autowired
     OTPRepository otpRepository;
-
+    @Autowired
+    MailSenderService mailSending;
+@Autowired
+    UserRepository userRepository;
     @Override
     public OTP GenerateOTp() {
         // Generate a 6-digit OTP
@@ -52,22 +61,37 @@ public class OTPServiceIMP implements OTPInterface {
         // Get the current date and time
         Date now = new Date();
 
-        // Check if the current date and time is before the expiration date
-        return now.before(expiredDate);
+        // Check if the current date and time is before or equal to the expiration date
+        return !now.after(expiredDate);
+    }
+
+    @Override
+    public void userstatus(String emailuser, Boolean result) {
+        if(result==true){
+        Optional<User> user = userRepository.findByEmail(emailuser);
+        user.get().setValid(true);
+        userRepository.save(user.get());}
     }
 
 
     @Override
-    public OTP ResendOTP(OTP existingOTP) {
+    public OTP ResendOTP(String email) {
         // Check if the existing OTP has expired
-        Date now = new Date();
-        if (existingOTP.getExpiredDate().before(now)) {
-            // Generate and save a new OTP with updated expiration date
-            return GenerateOTp();
-        } else {
-            // OTP is still valid, return the existing OTP without generating a new one
-            return existingOTP;
+
+        OTP newOtp= GenerateOTp();
+        Optional<User> user = userRepository.findByEmail(email);
+        String verificationCode = newOtp.getIdentification() ;// Replace with your actual verification code
+        String htmlMessage = "<div style='border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;'>"
+                + "Soyez le bienvenue dans notre plateforme /n"
+                + "Veuillez utiliser ce lien pour vous authentifier : /n "
+                + "<strong>Verification Code ! max 5 min ! :</strong>  /n" + verificationCode +
+                 "</div>";
+        try {
+            mailSending.send(user.get().getEmail(), "Welcome"+ user.get().getName() , htmlMessage);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+        return newOtp;
     }
 
     @Override

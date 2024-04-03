@@ -65,9 +65,9 @@ public class ChatServiceIMP implements ChatInterface {
         // Save the chat message
         Chat savedChat = chatRepository.save(chat);
 
-        // Broadcast the chat message to all subscribed clients of the group chat
+     /*   // Broadcast the chat message to all subscribed clients of the group chat
         String destination = "/topic/groupChat/" + groupChatId;
-        messagingTemplate.convertAndSend(destination, savedChat);
+        messagingTemplate.convertAndSend(destination, savedChat);*/
         return savedChat;
     }
 

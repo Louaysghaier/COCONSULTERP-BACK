@@ -36,7 +36,7 @@ public class WebSocketEventListener {
 
                 // Broadcast the leave message to the user's group chats
                 for (GroupChat groupChat : user.getGroupChats()) {
-                    messagingTemplate.convertAndSend("/topic/groupChat/" + groupChat.getId(), leaveMessage);
+                    messagingTemplate.convertAndSend("/topic/groupChat" + groupChat.getId(), leaveMessage);
                 }
             }
         } catch (Exception e) {

@@ -27,7 +27,8 @@ public class JwtProvider {
     public String generateAccessToken(Authentication authentication) {
 
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-        long ACCESS_TOKEN_VALIDITY_MS =    20 * 1000;
+       // long ACCESS_TOKEN_VALIDITY_MS =    50 * 1000;
+        long ACCESS_TOKEN_VALIDITY_MS =  5 * 24 * 60 * 60 * 1000;
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
@@ -36,7 +37,9 @@ public class JwtProvider {
                 .compact();
     }
     public String generateRefreshToken(Authentication authentication) {
-        long refreshTokenExpiration =  10*60 * 1000;
+        //long refreshTokenExpiration =  10*60 * 1000;
+        long refreshTokenExpiration = 2L * 7 * 24 * 60 * 60 * 1000;
+
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
 
         // Create refresh token

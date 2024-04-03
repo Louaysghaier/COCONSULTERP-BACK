@@ -3,10 +3,13 @@ package com.test.COCONSULT.ServiceIMP;
 
 import com.test.COCONSULT.DTO.ResetPass;
 import com.test.COCONSULT.DTO.RoleName;
+import com.test.COCONSULT.Entity.Chat;
+import com.test.COCONSULT.Entity.GroupChat;
 import com.test.COCONSULT.Entity.Role;
 import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.Interfaces.OTPInterface;
 import com.test.COCONSULT.Interfaces.UserServiceInterface;
+import com.test.COCONSULT.Reposotories.ChatRepository;
 import com.test.COCONSULT.Reposotories.RoleRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
 import com.test.COCONSULT.Services.LocalFileStorageService;
@@ -39,6 +42,9 @@ UserServiceIMP implements UserServiceInterface {
     LocalFileStorageService localFileStorageService;
     @Autowired
     OTPInterface otpInterface;
+    @Autowired
+    ChatRepository chatRepository;
+
 
     public List<User> getAllUser() {
         return userRepository.findAll();
@@ -56,6 +62,13 @@ UserServiceIMP implements UserServiceInterface {
 
     public User deleteUser(Long id) {
         User user = userRepository.findById(id).orElse(null);
+        Set<GroupChat> groupChat = user.getGroupChats();
+        for (GroupChat groupChat1 : groupChat) {
+
+            groupChat1.getUsers().remove(user);
+        }
+        List<Chat> chats = chatRepository.findAllBySender(user);
+        chatRepository.deleteAll(chats);
         userRepository.delete(user);
         return user;
 
@@ -144,7 +157,7 @@ UserServiceIMP implements UserServiceInterface {
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(userRole);
         user.setRoles(roles);
-        user.setValid(true);
+        user.setValid(false);
         user.setAddress(user1.getAddress());
         user.setNumber(user1.getNumber());
         User suser = userRepository.save(user);
@@ -157,7 +170,7 @@ UserServiceIMP implements UserServiceInterface {
                     + "Soyez le bienvenue dans notre plateforme" + newLine
                     + "Veuillez utiliser ce lien pour vous authentifier : " + newLine
                     + "<a href='" + url + "'>" + url + "</a>" + newLine
-                    + "<strong>Verification Code:</strong> " + verificationCode + newLine
+                    + "<strong>Verification Code ! max 5 min ! :</strong> " + verificationCode + newLine
                     + "</div>";
             try {
                 mailSending.send(user.getEmail(), "Welcome"+ user.getName() , htmlMessage);
@@ -244,7 +257,7 @@ public ResponseEntity<?> userforgetpassword(String email) {
                 + "Une tentative de Reset du Password à été effectuer " + newLine
                 //+ "Veuillez utiliser ce lien pour vous authentifier : " + newLine
               //  + "<a href='" + url + "'>" + url + "</a>" + newLine
-                + "<strong>Verification Code:</strong> " + verificationCode + newLine
+                + "<strong>Verification Code ! max 5 min ! :</strong> " + verificationCode + newLine
                 + "</div>";
         try {
             mailSending.send(user.get().getEmail(), "Did you Forget your password ?"+ user.get().getName() , htmlMessage);

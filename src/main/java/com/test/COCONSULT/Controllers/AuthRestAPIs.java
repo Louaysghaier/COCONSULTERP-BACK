@@ -67,7 +67,7 @@ public class AuthRestAPIs {
         // Combine the results from both searches
         Optional<User> user = userByEmail.isPresent() ? userByEmail : userByUsername;
 
-        if(user.get().isBlocked()){
+        if(user.get().isBlocked()&& user.get().isValid()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 

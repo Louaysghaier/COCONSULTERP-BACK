@@ -254,4 +254,9 @@ public class GroupChatSerrviceIMP implements GroupChatInterface {
         }
         return availableusers;
     }
+    public GroupChat getGroupChatByuser(Long iduser) {
+        User user = userRepository.findById(iduser)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        return groupChatRepository.findByUsersContains(user);
+    }
 }

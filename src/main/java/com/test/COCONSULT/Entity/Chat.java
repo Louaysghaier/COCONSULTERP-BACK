@@ -28,13 +28,13 @@ public class Chat {
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "sender_id")
-    @JsonIgnore
+   // @JsonIgnore
     private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "groupChat_id")
-    @JsonIgnore
+  //  @JsonIgnore
     private GroupChat groupChat;
 
 

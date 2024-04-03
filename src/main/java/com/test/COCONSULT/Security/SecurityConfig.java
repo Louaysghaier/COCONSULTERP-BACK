@@ -22,6 +22,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import javax.servlet.Filter;
 
 
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -84,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/refreshToken").permitAll() // Permit access to refreshToken endpoint
 
                 .antMatchers("/**").permitAll()
-                .anyRequest().authenticated() // Require authentication for any other endpoint
+               // .anyRequest().authenticated() // Require authentication for any other endpoint
 
                 .and()
                 .httpBasic();
@@ -93,8 +97,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
     }
 
+  /* @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
-
+*/
 
    /* @Override
     protected void configure(HttpSecurity http) throws Exception {

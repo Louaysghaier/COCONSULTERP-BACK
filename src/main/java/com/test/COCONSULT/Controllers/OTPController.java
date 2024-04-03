@@ -22,9 +22,13 @@ public class OTPController {
     public Boolean VerifOTP(@PathVariable   ("identification") String identification)  {
         return otpInterface.VerifOTP(identification);
     }
-@PostMapping("/ResendOTP")
-    public OTP ResendOTP(@RequestBody OTP existingOTP) {
-        return otpInterface.ResendOTP(existingOTP);
+@PostMapping("/userstatus/{emailuser}/{result}")
+    public void userstatus(@PathVariable ("emailuser") String emailuser,@PathVariable   ("result") Boolean result) {
+        otpInterface.userstatus(emailuser,result);
+    }
+@PostMapping("/ResendOTP/{email}")
+    public OTP ResendOTP(@PathVariable ("email") String email) {
+        return otpInterface.ResendOTP(email);
     }
 @DeleteMapping("/DeleteALLOTP")
     public void DeleteALLOTP() {
