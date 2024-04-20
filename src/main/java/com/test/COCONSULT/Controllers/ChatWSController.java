@@ -32,6 +32,7 @@ public class ChatWSController {
     public void sendMessage(
             @Payload Chat chatMessage
     ) {         logger.info("Received message: {}", chatMessage);
+        boolean existed = false;
         User sender = chatMessage.getSender();
        // User sender = chatMessage?.getSender();
         if (sender == null) {
@@ -44,15 +45,23 @@ public class ChatWSController {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Group chat not found");}
 
         // Check if the sender is a member of the group chat
-        if (!groupChat.getUsers().contains(sender)) {
+        for ( User u : groupChat.getUsers() ){
+            if (u.getId() == sender.getId()){
+                existed = true;
+                break;
+            }
+
+        }
+        if (existed==false){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sender is not a member of the group chat");
         }
+
         if(sender.isBannedchatGP()){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sender is banned from the group chat");
         }
 
 
-        chatMessage.setType(MessageType.CHAT);
+       // chatMessage.setType(MessageType.CHAT);
 
         // Save the chat message
         chatRepository.save(chatMessage);
@@ -60,7 +69,7 @@ public class ChatWSController {
 
         Long groupChatId = chatMessage.getGroupChat().getId();
         // Broadcast the message to the topic corresponding to the group chat ID
-        messagingTemplate.convertAndSend("/topic/groupChat/" + groupChatId, chatMessage);
+        messagingTemplate.convertAndSend("/topic/groupChat/" + groupChatId, chatMessage.getMessage());
 
     }
 

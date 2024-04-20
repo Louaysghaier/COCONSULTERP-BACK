@@ -38,6 +38,10 @@ UserServiceIMP userServiceIMP;
     public void validInscription(@PathVariable("idUser") Long idUser) {
         userServiceIMP.validInscription(idUser);
     }
+    @PutMapping("/debloque-user/{idUser}")
+    public void debloqueUser(@PathVariable("idUser") Long idUser) {
+        userServiceIMP.debloqueUser(idUser);
+    }
 
     @PutMapping("/bloque-user/{idUser}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -71,6 +75,9 @@ UserServiceIMP userServiceIMP;
     public List<User> getAlluserprofiles() {
         return userServiceIMP.getAlluserprofiles();
     }
+    @GetMapping("/getuserbyid/{id}")
+    public User getUserById(@PathVariable("id") Long id) {
+        return userServiceIMP.getUserById(id);}
     /*
     @GetMapping("/list-User/ASC")
     public List<User> getUsersOrderBySum_totalAsc() {

@@ -6,9 +6,12 @@ import javax.persistence.*;
 
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 @Getter
 @Setter
 @AllArgsConstructor

@@ -115,6 +115,23 @@ UserServiceIMP implements UserServiceInterface {
     public void updateUser(Long id) {
 
     }
+   public void  debloqueUser(Long idUser){
+       Optional<User> user = userRepository.findById(idUser);
+       User user1 = user.get();
+       String Newligne = System.getProperty("line.separator");
+       String body = "compte bloque\n  use this link to verify your account is :" + Newligne ;
+       if (user.isPresent()) {
+
+           user1.setBlocked(false);
+           this.userRepository.save(user1);
+           try {
+               mailSending.send(user1.getEmail(), "activation ", body);
+           } catch (Exception e) {
+               System.out.println(e.getMessage());
+           }
+       }
+   }
+
 
 /*
     public List<User> getUsersOrderBySum_totalAsc(){
