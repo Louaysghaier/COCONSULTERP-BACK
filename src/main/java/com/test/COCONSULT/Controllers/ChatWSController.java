@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class ChatWSController {
@@ -68,8 +70,14 @@ public class ChatWSController {
 
 
         Long groupChatId = chatMessage.getGroupChat().getId();
+        // Construct the message payload including sender information
+        Map<String, Object> messagePayload = new HashMap<>();
+        messagePayload.put("content", chatMessage.getMessage());
+        messagePayload.put("sender", chatMessage.getSender().getUsername());
+        messagePayload.put("time", chatMessage.getDate());
+
         // Broadcast the message to the topic corresponding to the group chat ID
-        messagingTemplate.convertAndSend("/topic/groupChat/" + groupChatId, chatMessage.getMessage());
+        messagingTemplate.convertAndSend("/topic/groupChat/" + groupChatId, messagePayload);
 
     }
 
