@@ -10,5 +10,7 @@ public interface ActivitySalesTeamService {
     ActivitySalesTeam addActivitySalesTeam(ActivitySalesTeam activitySalesTeam);
     ActivitySalesTeam retrieveActivitySalesTeam(Long idActSale);
 
+    public List<ActivitySalesTeam> getActivitySalesTeamByClass(String classSalesTeam) ;
+
     void removeActivitySalesTeam(Long idActSale);
 }

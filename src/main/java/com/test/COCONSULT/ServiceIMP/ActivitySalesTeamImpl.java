@@ -1,5 +1,6 @@
 package com.test.COCONSULT.ServiceIMP;
 
+import com.test.COCONSULT.DTO.ClassSalesTeam;
 import com.test.COCONSULT.Entity.ActivitySalesTeam;
 import com.test.COCONSULT.Interfaces.ActivitySalesTeamService;
 import com.test.COCONSULT.Reposotories.ActivitySalesTeamRepository;
@@ -32,6 +33,12 @@ public class ActivitySalesTeamImpl implements ActivitySalesTeamService {
     public ActivitySalesTeam retrieveActivitySalesTeam(Long idActSale) {
         Optional<ActivitySalesTeam> ActivitySalesTeamOptional = activitySalesTeamRepository.findById(idActSale);
         return ActivitySalesTeamOptional.orElse(null);
+    }
+
+    @Override
+    public List<ActivitySalesTeam> getActivitySalesTeamByClass(String classSalesTeam) {
+        return activitySalesTeamRepository.findByClassSalesTeam(ClassSalesTeam.valueOf(classSalesTeam));
+
     }
 
     @Override

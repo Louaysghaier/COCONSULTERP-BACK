@@ -54,4 +54,10 @@ public class ActivitySalesTeamController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/GetActivitySalesTeamByClass/{classSalesTeam}")
+    public ResponseEntity<List<ActivitySalesTeam>> getActivitySalesTeamByClass(@PathVariable String classSalesTeam) {
+        List<ActivitySalesTeam> activitySalesTeamList = activitySalesTeamService.getActivitySalesTeamByClass(classSalesTeam);
+        return ResponseEntity.ok(activitySalesTeamList);
+    }
+
 }

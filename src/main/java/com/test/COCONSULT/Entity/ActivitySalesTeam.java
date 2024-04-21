@@ -1,5 +1,6 @@
 package com.test.COCONSULT.Entity;
 
+import com.test.COCONSULT.DTO.ClassSalesTeam;
 import com.test.COCONSULT.DTO.Status;
 import com.test.COCONSULT.DTO.TypeSalesActivity;
 import lombok.*;
@@ -26,4 +27,8 @@ public class ActivitySalesTeam {
     private TypeSalesActivity TypeAct ;
     @Enumerated(EnumType.STRING)
     private Status status ;
+    @Enumerated(EnumType.STRING)
+    private ClassSalesTeam classSalesTeam ;
+
+
 }
