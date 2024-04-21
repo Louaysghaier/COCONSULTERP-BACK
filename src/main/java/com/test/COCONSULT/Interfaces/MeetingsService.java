@@ -8,6 +8,7 @@ public interface MeetingsService {
     List<Meetings> retrieveMeet();
     Meetings updateMeet(Meetings meetings);
     Meetings ajouterMeet(Meetings meetings);
+    List<Meetings> getMeetingsForProject(Long projectId);
 
     Meetings retrieveMeet(Long idMeet);
 

@@ -11,8 +11,6 @@ public interface AssignementsService  {
     Assignements updateAssignements(Assignements assignements);
     Assignements addAssignements(Assignements assignements);
     Assignements retrieveAssignements(Long idAssignements);
-
-
     void removeAssignements(Long idAssignements);
     List<Assignements> getAssignmentsForProject(Long idProjet);
 

@@ -1,9 +1,7 @@
 package com.test.COCONSULT.ServiceIMP;
 
 
-import com.test.COCONSULT.Entity.Assignements;
-import com.test.COCONSULT.Entity.Meetings;
-import com.test.COCONSULT.Entity.Quote;
+import com.test.COCONSULT.Entity.*;
 import com.test.COCONSULT.Interfaces.QuoteService;
 import com.test.COCONSULT.Reposotories.AssignementsRepository;
 import com.test.COCONSULT.Reposotories.ExpansesRepository;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -31,8 +30,8 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    public Quote retrieveQuote(Long idQuote) {
-        return quoteRepository.findById(idQuote).orElse(null);
+    public Projets retrieveQuote(Long idQuote) {
+        return Objects.requireNonNull(quoteRepository.findById(idQuote).orElse(null)).getProjets();
     }
 
     @Override
@@ -57,7 +56,7 @@ public class QuoteServiceImpl implements QuoteService {
 
 /*@Override
     public List<Assignements> getAssignementsForQuote(Long quoteId) {
-        return assignementsRepository.findByQuoteId(quoteId);
+        return assignementsRepository.findByQuoteIdQuote(quoteId);
     }*/
 
     @Override

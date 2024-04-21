@@ -58,11 +58,11 @@ public class ProjFeedController {
         projFeedService.removeProjFeed(idProjFeed);
         return ResponseEntity.noContent().build();
     }
-    /*@GetMapping("/{id}/projects")
+    @GetMapping("/{id}/projects")
     public ResponseEntity<List<ProjFeed>> getProjFeedWithProjects(@PathVariable("id") Long id) {
         List<ProjFeed> projFeeds = projFeedService.getProjFeedWithProjects(id);
         return ResponseEntity.ok(projFeeds);
-    }*/
+    }
 
 
     @GetMapping("/updatedAfterDate/{date}")

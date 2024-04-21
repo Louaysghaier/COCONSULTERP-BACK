@@ -1,15 +1,13 @@
 package com.test.COCONSULT.Interfaces;
 
-import com.test.COCONSULT.Entity.Assignements;
-import com.test.COCONSULT.Entity.Meetings;
-import com.test.COCONSULT.Entity.Quote;
+import com.test.COCONSULT.Entity.*;
 
 import java.util.List;
 
 public interface QuoteService {
     List<Quote> retrieveQuotes();
 
-    Quote retrieveQuote(Long id);
+    Projets retrieveQuote(Long id);
 
     Quote ajouterQuote(Quote quote);
 
@@ -19,7 +17,7 @@ public interface QuoteService {
 
    // List<Expanses> getExpansesForQuote(Long quoteId);
 
-    //List<Assignements> getAssignementsForQuote(Long quoteId);
+   // List<Assignements> getAssignementsForQuote(Long quoteId);
 
     Assignements addAssignements(Assignements assignements);
 

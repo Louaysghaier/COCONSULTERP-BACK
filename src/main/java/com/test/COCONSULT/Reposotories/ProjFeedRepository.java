@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface ProjFeedRepository extends JpaRepository<ProjFeed, Long> {
     //List<ProjFeed> findBy(Long idProjet);
+    List<ProjFeed> findProjFeedByIdPjtFeed(Long projectId);
+
 
     List<ProjFeed> findByTimeUpdAfter(LocalDate date);
 

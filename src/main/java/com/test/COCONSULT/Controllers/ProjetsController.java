@@ -82,7 +82,7 @@ public class ProjetsController {
     public ResponseEntity<Projets> addProjets(@RequestBody Projets projets) {
         Projets savedProjets = projetsService.addProjets(projets);
         String message = "Le projet " + projets.getProjetTitle() + " a été ajouté avec succès.";
-        smsService.sendSms("+NUMERO_DESTINATAIRE", message); // Remplacez NUMERO_DESTINATAIRE par le numéro de téléphone du destinataire
+        smsService.sendSms("+12512902845", message); // Remplacez NUMERO_DESTINATAIRE par le numéro de téléphone du destinataire
 
         return new ResponseEntity<>(savedProjets, HttpStatus.CREATED);
     }
@@ -97,7 +97,6 @@ public class ProjetsController {
             return ResponseEntity.notFound().build();
         }
     }
-
     @DeleteMapping("/deleteProject/{idProjets}")
     public ResponseEntity<Void> removeProjets(@PathVariable("idProjets") Long idProjets) {
         projetsService.removeProjets(idProjets);
@@ -123,11 +122,11 @@ public class ProjetsController {
         return new ResponseEntity<>(savedAssignement, HttpStatus.CREATED);
     }
 
-    /*@GetMapping("/{id}/meetings")
+    @GetMapping("/{id}/meetings")
     public ResponseEntity<List<Meetings>> getMeetingsForProject(@PathVariable("id") Long projectId) {
         List<Meetings> meetings = meetingsService.getMeetingsForProject(projectId);
         return ResponseEntity.ok(meetings);
-    }*/
+    }
     @PostMapping("/{id}/meetings")
     public ResponseEntity<Meetings> createMeetingForProject(@PathVariable("id") Long projectId, @RequestBody Meetings meeting) {
         // Assurez-vous de définir le projet pour la réunion

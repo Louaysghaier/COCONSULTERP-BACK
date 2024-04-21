@@ -2,7 +2,10 @@ package com.test.COCONSULT.Controllers;
 
 import com.test.COCONSULT.Entity.Assignements;
 import com.test.COCONSULT.Interfaces.AssignementsService;
+import com.test.COCONSULT.Interfaces.QuoteService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +18,7 @@ import java.util.List;
 public class AssignementsController{
 
     private AssignementsService assignementsService;
+
 
     @GetMapping("/getAllAssigns")
     public ResponseEntity<List<Assignements>> retrieveAssignements() {
@@ -36,6 +40,7 @@ public class AssignementsController{
         return assignementsService.addAssignements(assignements);
 
     }
+
     @PutMapping("/updateAssig/{id}")
     public ResponseEntity<Assignements> updateAssignements(@PathVariable("id") Long id, @RequestBody Assignements assignements) {
         assignements.setIdAssign(id); // Set the ID from the path variable

@@ -2,29 +2,28 @@ package com.test.COCONSULT.Services;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+
 import com.twilio.type.PhoneNumber;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SMSService {
 
-    //public static final String ACCOUNT_SID = "AC76add91e6b5de53e86ad317ebedcc246";
-    //public static final String AUTH_TOKEN = "b6acdab9ab349315f381ed4f95dfe586";
+    public static final String ACCOUNT_SID = "AC2cda61789a8672d673f7581c7a16e914";
+    public static final String AUTH_TOKEN = "8653d2080d8ab0380f7c59e56840a982";
 
-    @Value("${twilio.accountSid}")
-    private String ACCOUNT_SID;
-
-    @Value("${twilio.authToken}")
-    private String AUTH_TOKEN;
     public void sendSms(String numeroDestinataire, String messageBody) {
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        Message message = Message.creator(
-                        new PhoneNumber("+21653072028"),
-                        new PhoneNumber("+15169793002"),
-                        "You've been Successfully added to the project ")
-                .create();
+        try {
+            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+            Message message = Message.creator(
+                            new PhoneNumber("+21699025355"),
+                            new PhoneNumber("+12512902845"), // Votre numéro Twilio
+                            "this is insane").create();
 
-        System.out.println(message.getSid());
+            System.out.println("Message SID: " + message.getSid());
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'envoi du SMS : " + e.getMessage());
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.test.COCONSULT.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,11 +21,10 @@ public class Assignements implements Serializable {
     private LocalDate timeRecording;
     private Double expenses;
 
-    @Transient
-    private Quote quote;
 
+    @JsonIgnore
     @OneToOne
-    @JoinColumn(name= "idProjet")
+    //@JoinColumn(name= "idProjet")
     Projets projets;
 
 }

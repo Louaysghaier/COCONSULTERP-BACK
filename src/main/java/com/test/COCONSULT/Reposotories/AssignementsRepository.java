@@ -11,8 +11,6 @@ import java.util.List;
 public interface AssignementsRepository extends JpaRepository<Assignements, Long> {
     List<Assignements> findByProjetsIdProjet(Long idProjet);
 
-    //List<Assignements> findByQuoteIdQuote(Long quoteId);
-
     List<Assignements> findByProjetsIdProjetAndTimeRecordingAfter(Long idProjet, LocalDate date);
 
     List<Assignements> findTopNByProjetsIdProjetOrderByTimeRecordingDesc(Long idProjet);

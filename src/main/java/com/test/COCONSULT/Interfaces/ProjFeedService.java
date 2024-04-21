@@ -18,7 +18,9 @@ public interface ProjFeedService {
 
     //List<ProjFeed> getProjFeedsForProject(Long projectId);
 
-   // List<ProjFeed> getProjFeedWithProjects(Long id);
+    List<ProjFeed> getProjFeedsForProject(Long projectId);
+
+    List<ProjFeed> getProjFeedWithProjects(Long id);
 
     List<ProjFeed> getProjFeedsUpdatedAfterDate(String date);
 

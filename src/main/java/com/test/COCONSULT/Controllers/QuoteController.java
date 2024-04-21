@@ -1,8 +1,6 @@
 package com.test.COCONSULT.Controllers;
 
-import com.test.COCONSULT.Entity.Assignements;
-import com.test.COCONSULT.Entity.Meetings;
-import com.test.COCONSULT.Entity.Quote;
+import com.test.COCONSULT.Entity.*;
 import com.test.COCONSULT.Interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,15 +32,6 @@ public class QuoteController {
         return ResponseEntity.ok(quotes);
     }
 
-    @GetMapping("/getQuotesById/{idQuote}")
-    public ResponseEntity<Quote> retrieveQuote(@PathVariable("idQuote") Long idQuote) {
-        Quote quote = quoteService.retrieveQuote(idQuote);
-        if (quote != null) {
-            return ResponseEntity.ok(quote);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
     @PostMapping("/ajouterQuote")
     public ResponseEntity<Quote> addQuote(@RequestBody Quote quote) {
@@ -78,25 +67,32 @@ public class QuoteController {
         return ResponseEntity.ok(assignements);
     }*/
 
-    @PostMapping("/{id}/assignements")
+   /* @PostMapping("/{id}/assignements")
     public ResponseEntity<Assignements> createAssignementForQuote(@PathVariable("id") Long idQuote, @RequestBody Assignements assignements) {
         // Assurez-vous de définir la citation pour l'assignement
-        assignements.setQuote(quoteService.retrieveQuote(idQuote));
-        Assignements savedAssignement = quoteService.addAssignements(assignements);
+        Projets quote = quoteService.retrieveQuote(idQuote).getIdProjet();
+
+        // Vérifiez si la citation a été trouvée
+        if (quote == null) {
+            return ResponseEntity.notFound().build();
+        }
+        // Ajoutez l'assignement
+        Assignements savedAssignement = assignementsService.addAssignements(assignements);
         return new ResponseEntity<>(savedAssignement, HttpStatus.CREATED);
     }
+*/
 
-   /* @GetMapping("/{id}/meetings")
+    /*@GetMapping("/{id}/meetings")
     public ResponseEntity<List<Meetings>> getMeetingsForQuote(@PathVariable("id") Long idQuote) {
         List<Meetings> meetings = quoteService.getMeetingsForQuote(idQuote);
         return ResponseEntity.ok(meetings);
-    }*/
-
-    @PostMapping("/{id}/meetings")
+    }
+*/
+    /*@PostMapping("/{id}/meetings")
     public ResponseEntity<Meetings> createMeetingForQuote(@PathVariable("id") Long idQuote, @RequestBody Meetings meeting) {
         // Assurez-vous de définir la citation pour la réunion
         meeting.setQuote(quoteService.retrieveQuote(idQuote));
         Meetings savedMeeting = quoteService.addMeeting(meeting);
         return new ResponseEntity<>(savedMeeting, HttpStatus.CREATED);
-    }
+    }*/
 }

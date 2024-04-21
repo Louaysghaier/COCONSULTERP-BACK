@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface TimeRecordRepository extends JpaRepository<TimeRecord, Long> {
     List<TimeRecord> findByProjetsIdProjet(Long projectId);
-    //List<TimeRecord> findByUserId(Long userId);
+    List<TimeRecord> findTimeRecordByProjetsIdProjet(Long userId);
 
     @Query("SELECT COUNT(t) FROM TimeRecord t WHERE t.projets.idProjet = :projectId AND t.duration = :duration")
     long countByProjectIdAndDuration(Long projectId, LocalDate duration);

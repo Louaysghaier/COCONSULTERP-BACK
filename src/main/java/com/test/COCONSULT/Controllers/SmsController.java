@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/SMS")
 public class SmsController {
-
     @Autowired
-    private SMSService smsService;
+    private  SMSService smsService;
 
     @PostMapping("/send-sms")
     public ResponseEntity<String> sendSMS(@RequestParam String to, @RequestParam String message) {

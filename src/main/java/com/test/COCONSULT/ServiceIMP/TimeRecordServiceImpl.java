@@ -50,7 +50,7 @@ public class TimeRecordServiceImpl implements TimeRecordService {
       return timeRecordRepository.findByProjetsIdProjet(projectId);
    }
 
-   /*@Override
+  /* @Override
    public List<TimeRecord> getTimeRecordsForUser(Long userId) {
       return timeRecordRepository.findByUserId(userId);
    }*/

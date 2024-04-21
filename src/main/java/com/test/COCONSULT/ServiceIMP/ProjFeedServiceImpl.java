@@ -42,14 +42,14 @@ public class ProjFeedServiceImpl implements ProjFeedService {
         projFeedRepository.deleteById(idProjFeed);
     }
 
-   /* @Override
+    @Override
     public List<ProjFeed> getProjFeedsForProject(Long projectId) {
-        return projFeedRepository.findByProjectId(projectId);
+        return projFeedRepository.findProjFeedByIdPjtFeed(projectId);
     }
     @Override
     public List<ProjFeed> getProjFeedWithProjects(Long projectId) {
-        return projFeedRepository.findByProjectId(projectId);
-    }*/
+        return projFeedRepository.findProjFeedByIdPjtFeed(projectId);
+    }
 
     @Override
     public List<ProjFeed> getProjFeedsUpdatedAfterDate(String date) {
