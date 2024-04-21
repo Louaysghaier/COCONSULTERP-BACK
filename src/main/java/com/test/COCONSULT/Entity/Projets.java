@@ -33,6 +33,7 @@ public class Projets implements Serializable
     @Positive
     private Double budget;
 
+    private String Mail;
     @NotNull
     private LocalDate dateDebut;
 
@@ -43,6 +44,18 @@ public class Projets implements Serializable
     @Positive
     private int effectif;
     private String description;
+
+    public void setMail(String mail) {
+        if (isValidEmail(mail)) {
+            this.Mail = mail;
+        } else {
+            throw new IllegalArgumentException("Adresse email invalide.");
+        }
+    }
+        private boolean isValidEmail(String email) {
+            String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+            return email.matches(emailRegex);
+        }
 
     @JsonIgnore
     @OneToMany (mappedBy = "projets")
@@ -58,9 +71,11 @@ public class Projets implements Serializable
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL)
     private List<Activity> activities;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "projets")
     private List<Meetings> meetings;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "projets")
     private List<Contract> contracts;
 

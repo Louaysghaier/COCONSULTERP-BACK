@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -53,5 +54,29 @@ public class ExpansesController {
     public ResponseEntity<Void> removeExpanses(@PathVariable("id") Long idExpanses) {
         expansesService.removeExpanses(idExpanses);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/{projectId}/getExpansesForProject")
+    public ResponseEntity<List<Expanses>> getExpansesForProject(@PathVariable("projectId") Long projectId) {
+        List<Expanses> expanses = expansesService.getExpansesForProject(projectId);
+        return ResponseEntity.ok(expanses);
+    }
+
+
+
+
+    @GetMapping("/{projectId}/getExpansesUpdatedAfterDate")
+    public ResponseEntity<List<Expanses>> getExpansesUpdatedAfterDate(
+            @PathVariable("projectId") Long projectId,
+            @RequestParam("date") String date) {
+        List<Expanses> expanses = expansesService.getExpansesUpdatedAfterDate(projectId, LocalDate.parse(date));
+        return ResponseEntity.ok(expanses);
+    }
+
+    @GetMapping("/{projectId}/getLastExpanses")
+    public ResponseEntity<List<Expanses>> getLastExpanses(
+            @PathVariable("projectId") Long projectId,
+            @RequestParam("limit") int limit) {
+        List<Expanses> expanses = expansesService.getLastExpanses(projectId, limit);
+        return ResponseEntity.ok(expanses);
     }
 }

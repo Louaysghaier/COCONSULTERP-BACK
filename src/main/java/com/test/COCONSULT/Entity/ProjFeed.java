@@ -25,8 +25,6 @@ public class ProjFeed  implements Serializable {
     @JsonIgnore
     @ManyToMany
     private Set<Projets> projets;
-    @JsonIgnore
-    @OneToOne
-    private User userConsultant;
+
 
 }

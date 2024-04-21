@@ -2,11 +2,11 @@ package com.test.COCONSULT.Controllers;
 
 import com.test.COCONSULT.Entity.Assignements;
 import com.test.COCONSULT.Interfaces.AssignementsService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping("assignements")
@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AssignementsController{
 
-    private final AssignementsService assignementsService;
+    private AssignementsService assignementsService;
 
     @GetMapping("/getAllAssigns")
     public ResponseEntity<List<Assignements>> retrieveAssignements() {
@@ -50,5 +50,25 @@ public class AssignementsController{
     public ResponseEntity<Void> removeAssignements(@PathVariable("id") Long idAssignements) {
         assignementsService.removeAssignements(idAssignements);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/{idProjet}/getAssignmentsForProject")
+    public ResponseEntity<List<Assignements>> getAssignmentsForProject(@PathVariable("idProjet") Long idProjet) {
+        List<Assignements> assignments = assignementsService.getAssignmentsForProject(idProjet);
+        return ResponseEntity.ok(assignments);
+
+    }
+    @GetMapping("/{idProjet}/getAssignmentsUpdatedAfterDate")
+    public ResponseEntity<List<Assignements>> getAssignmentsUpdatedAfterDate(
+            @PathVariable("idProjet") Long idProjet,
+            @RequestParam("date") String date) {
+        List<Assignements> assignments = assignementsService.getAssignmentsUpdatedAfterDate(idProjet, LocalDate.parse(date));
+        return ResponseEntity.ok(assignments);
+    }
+
+    @GetMapping("/{idProjet}/getLastAssignments")
+    public ResponseEntity<List<Assignements>> getLastAssignments(
+            @PathVariable("idProjet") Long idProjet) {
+        List<Assignements> assignments = assignementsService.getLastAssignments(idProjet);
+        return ResponseEntity.ok(assignments);
     }
 }
