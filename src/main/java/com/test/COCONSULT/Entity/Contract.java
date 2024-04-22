@@ -22,7 +22,7 @@ public class Contract {
     private String Description ;
     private LocalDate DateContract ;
     private double Montant ;
-    private int NbreTrnache ;
+    private int NbreTranche ;
 
     @Enumerated(EnumType.STRING)
     private EtapeContract Etape ;
@@ -31,7 +31,22 @@ public class Contract {
     @OneToMany (mappedBy = "contracts")
     private List<Payment> payments ;
 
-    @OneToOne
-    @JoinColumn(name = "repertoire_id", referencedColumnName = "idRepertoire")
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "repertoire_id")
     private Repertoire repertoire;
+
+    private String repertoireContact;
+
+
+    public String getRepertoireContact() {
+        return repertoireContact;
+    }
+
+    public void setRepertoireContact(String repertoireContact) {
+        this.repertoireContact = repertoireContact;
+    }
+
+
 }

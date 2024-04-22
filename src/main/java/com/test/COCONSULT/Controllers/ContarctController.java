@@ -47,10 +47,27 @@ public class ContarctController{
 
     }
 
+    @GetMapping("/{idContract}/repertoireContact")
+    public ResponseEntity<String> getRepertoireContactByContractId(@PathVariable Long idContract) {
+        String repertoireContact = contractService.getRepertoireContactByContractId(idContract);
+
+        if (repertoireContact != null) {
+            return ResponseEntity.ok(repertoireContact);
+        } else {
+            // Handle the case when repertoireContact is null (e.g., contract not found)
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/RemoveContract/{id}")
     public ResponseEntity<Void> removeContract(@PathVariable("id") Long idContract) {
         contractService.removeContract(idContract);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/allWithRepertoireContact")
+    public ResponseEntity<List<Contract>> retrieveContractsWithRepertoireContact() {
+        List<Contract> contracts = contractService.retrieveContractsWithRepertoireContact();
+        return ResponseEntity.ok(contracts);
     }
 
 }
