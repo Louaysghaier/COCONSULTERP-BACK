@@ -10,7 +10,7 @@ public interface ContractService {
     List<Contract> retrieveContract();
     Contract updateContract(Contract contract);
     Contract addContract(Contract contract) ;
-    Contract addContract(Contract contract, Long repertoireId) ;
+    Contract addContractAffectRep(Contract contract, Long repertoireId) ;
     Contract retrieveContract(Long idContract);
 
     public String getRepertoireContactByContractId(Long idContract) ;

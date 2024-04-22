@@ -2,6 +2,7 @@
 package com.test.COCONSULT.Controllers;
 
 import com.test.COCONSULT.Entity.ActivitySalesTeam;
+import com.test.COCONSULT.Entity.Contract;
 import com.test.COCONSULT.Interfaces.ActivitySalesTeamService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +60,26 @@ public class ActivitySalesTeamController {
         List<ActivitySalesTeam> activitySalesTeamList = activitySalesTeamService.getActivitySalesTeamByClass(classSalesTeam);
         return ResponseEntity.ok(activitySalesTeamList);
     }
+
+    @PutMapping("/updateStatus/{id}")
+    public ResponseEntity<ActivitySalesTeam> updateStatus(@PathVariable("id") Long idActSales) {
+        ActivitySalesTeam updatedActivitySalesTeam = activitySalesTeamService.updateStatus(idActSales);
+        if (updatedActivitySalesTeam != null) {
+            return ResponseEntity.ok(updatedActivitySalesTeam);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/ajouterActivitySalesTeam/{repertoireId}")
+    public ResponseEntity<ActivitySalesTeam> addActivityAffectRep(@RequestBody ActivitySalesTeam activitySalesTeam, @PathVariable Long repertoireId) {
+        ActivitySalesTeam addedActivitySalesTeam = activitySalesTeamService.addActivityAffectRep(activitySalesTeam, repertoireId);
+        if (addedActivitySalesTeam != null) {
+            return ResponseEntity.ok(addedActivitySalesTeam);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

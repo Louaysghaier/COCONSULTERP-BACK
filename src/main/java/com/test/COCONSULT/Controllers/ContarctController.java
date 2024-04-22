@@ -35,6 +35,16 @@ public class ContarctController{
 
     }
 
+    @PostMapping("/ajouterContract/{repertoireId}")
+    public ResponseEntity<Contract> addContratAffectRepo(@RequestBody Contract contract, @PathVariable Long repertoireId) {
+        Contract addedContract = contractService.addContractAffectRep(contract, repertoireId);
+        if (addedContract != null) {
+            return ResponseEntity.ok(addedContract);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/updateContract/{id}")
     public ResponseEntity<Contract> updateContract(@PathVariable("id") Long idContract, @RequestBody Contract contract) {
         contract.setIdContract(idContract); // Set the ID from the path variable

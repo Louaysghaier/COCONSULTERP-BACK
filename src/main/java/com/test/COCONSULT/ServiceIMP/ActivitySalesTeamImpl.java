@@ -1,9 +1,13 @@
 package com.test.COCONSULT.ServiceIMP;
 
 import com.test.COCONSULT.DTO.ClassSalesTeam;
+import com.test.COCONSULT.DTO.Status;
 import com.test.COCONSULT.Entity.ActivitySalesTeam;
+import com.test.COCONSULT.Entity.Contract;
+import com.test.COCONSULT.Entity.Repertoire;
 import com.test.COCONSULT.Interfaces.ActivitySalesTeamService;
 import com.test.COCONSULT.Reposotories.ActivitySalesTeamRepository;
+import com.test.COCONSULT.Reposotories.RepertoireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,8 @@ import java.util.Optional;
 public class ActivitySalesTeamImpl implements ActivitySalesTeamService {
     @Autowired
     ActivitySalesTeamRepository activitySalesTeamRepository ;
+    @Autowired
+    RepertoireRepository repertoireRepository;
     @Override
     public List<ActivitySalesTeam> retrieveActivitySalesTeam() {
         return activitySalesTeamRepository.findAll() ;
@@ -29,6 +35,9 @@ public class ActivitySalesTeamImpl implements ActivitySalesTeamService {
         return activitySalesTeamRepository.save(activitySalesTeam) ;
     }
 
+
+
+
     @Override
     public ActivitySalesTeam retrieveActivitySalesTeam(Long idActSale) {
         Optional<ActivitySalesTeam> ActivitySalesTeamOptional = activitySalesTeamRepository.findById(idActSale);
@@ -40,6 +49,47 @@ public class ActivitySalesTeamImpl implements ActivitySalesTeamService {
         return activitySalesTeamRepository.findByClassSalesTeam(ClassSalesTeam.valueOf(classSalesTeam));
 
     }
+
+
+    @Override
+    public ActivitySalesTeam updateStatus(Long idActSale) {
+        // Retrieve the activity from the database by its ID
+        Optional<ActivitySalesTeam> optionalActivity = activitySalesTeamRepository.findById(idActSale);
+
+        if (optionalActivity.isPresent()) {
+            ActivitySalesTeam activitySalesTeam = optionalActivity.get();
+
+            // Retrieve the current status of the activity
+            Status currentStatus = activitySalesTeam.getStatus();
+
+            // Toggle the status between 'DONE' and 'WAITING'
+            if (currentStatus == Status.WAITING) {
+                activitySalesTeam.setStatus(Status.DONE);
+            } else {
+                activitySalesTeam.setStatus(Status.WAITING);
+            }
+
+            // Update the activity in the database
+            return activitySalesTeamRepository.save(activitySalesTeam);
+        } else {
+            // Return null if the activity is not found
+            return null;
+        }
+    }
+
+    @Override
+    public ActivitySalesTeam addActivityAffectRep(ActivitySalesTeam activitySalesTeam, Long repertoireId) {
+        Repertoire repertoire = repertoireRepository.findById(repertoireId).orElse(null);
+        if (repertoire != null) {
+            activitySalesTeam.setRepertoireee(repertoire);
+            // Automatically set repertoireContact to the Contact attribute of Repertoire
+            activitySalesTeam.setRepertoireContact(repertoire.getContact());
+            return activitySalesTeamRepository.save(activitySalesTeam);
+        } else {
+            return null;
+        }
+    }
+
 
     @Override
     public void removeActivitySalesTeam(Long idActSale) {

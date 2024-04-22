@@ -31,16 +31,18 @@ public class ContractServiceImpl implements ContractService {
         return contractRepository.save(contract);
     }
     @Override
-    public Contract addContract(Contract contract, Long repertoireId) {
+    public Contract addContractAffectRep(Contract contract, Long repertoireId) {
         Repertoire repertoire = repertoireRepository.findById(repertoireId).orElse(null);
         if (repertoire != null) {
             contract.setRepertoire(repertoire);
+            // Automatically set repertoireContact to the Contact attribute of Repertoire
+            contract.setRepertoireContact(repertoire.getContact());
             return contractRepository.save(contract);
         } else {
-            // Handle the case when repertoire is not found
             return null;
         }
     }
+
     @Override
     public Contract retrieveContract(Long idContract) {
         Optional<Contract> ContractOptional = contractRepository.findById(idContract);
