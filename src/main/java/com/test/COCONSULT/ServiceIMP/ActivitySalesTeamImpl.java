@@ -8,6 +8,7 @@ import com.test.COCONSULT.Entity.Repertoire;
 import com.test.COCONSULT.Interfaces.ActivitySalesTeamService;
 import com.test.COCONSULT.Reposotories.ActivitySalesTeamRepository;
 import com.test.COCONSULT.Reposotories.RepertoireRepository;
+import com.test.COCONSULT.Services.SMSServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,16 @@ import java.util.Optional;
 @Service
 public class ActivitySalesTeamImpl implements ActivitySalesTeamService {
     @Autowired
-    ActivitySalesTeamRepository activitySalesTeamRepository ;
+    ActivitySalesTeamRepository activitySalesTeamRepository;
     @Autowired
     RepertoireRepository repertoireRepository;
+
+    @Autowired
+    SMSServices smsServices;
+
     @Override
     public List<ActivitySalesTeam> retrieveActivitySalesTeam() {
-        return activitySalesTeamRepository.findAll() ;
+        return activitySalesTeamRepository.findAll();
     }
 
     @Override
@@ -32,10 +37,8 @@ public class ActivitySalesTeamImpl implements ActivitySalesTeamService {
 
     @Override
     public ActivitySalesTeam addActivitySalesTeam(ActivitySalesTeam activitySalesTeam) {
-        return activitySalesTeamRepository.save(activitySalesTeam) ;
+        return activitySalesTeamRepository.save(activitySalesTeam);
     }
-
-
 
 
     @Override
@@ -89,6 +92,29 @@ public class ActivitySalesTeamImpl implements ActivitySalesTeamService {
             return null;
         }
     }
+
+    @Override
+    public ActivitySalesTeam addActivityAffectRepSendSMS(ActivitySalesTeam activitySalesTeam, Long repertoireId) {
+        Repertoire repertoire = repertoireRepository.findById(repertoireId).orElse(null);
+        if (repertoire != null) {
+            activitySalesTeam.setRepertoireee(repertoire);
+            // Automatically set repertoireContact to the Contact attribute of Repertoire
+            activitySalesTeam.setRepertoireContact(repertoire.getContact());
+
+            String messageBody = "Dear User,\n\n" + activitySalesTeam.getRepertoireee().getContact() + " \n" +
+                    "There is some news .\n\n" +
+                    "Content: " + activitySalesTeam.getDescription() + "\n" +
+                    "Heure Start: " + activitySalesTeam.getHeureStart() + "\n" +
+                    "Heure End: " + activitySalesTeam.getHeureEnd() + "\n\n" +
+                    "\nYour are Welcome ";
+
+            smsServices.sendSms(repertoire.getNumTel(), messageBody);
+        }
+        return activitySalesTeamRepository.save(activitySalesTeam);
+    }
+
+
+
 
 
     @Override

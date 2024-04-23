@@ -4,7 +4,9 @@ package com.test.COCONSULT.Controllers;
 import com.test.COCONSULT.Entity.ActivitySalesTeam;
 import com.test.COCONSULT.Entity.Contract;
 import com.test.COCONSULT.Interfaces.ActivitySalesTeamService;
+import com.test.COCONSULT.Services.SMSServices;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,8 @@ import java.util.List;
 
 public class ActivitySalesTeamController {
     private final ActivitySalesTeamService activitySalesTeamService ;
+    @Autowired
+    SMSServices smsServices;
     @GetMapping("/GetAllActSalesTeam")
     public ResponseEntity<List<ActivitySalesTeam>> retrieveActivitySalesTeam() {
         List<ActivitySalesTeam> ActivitySalesTeamList = activitySalesTeamService.retrieveActivitySalesTeam();
@@ -75,6 +79,17 @@ public class ActivitySalesTeamController {
     public ResponseEntity<ActivitySalesTeam> addActivityAffectRep(@RequestBody ActivitySalesTeam activitySalesTeam, @PathVariable Long repertoireId) {
         ActivitySalesTeam addedActivitySalesTeam = activitySalesTeamService.addActivityAffectRep(activitySalesTeam, repertoireId);
         if (addedActivitySalesTeam != null) {
+            return ResponseEntity.ok(addedActivitySalesTeam);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/ajouterActivitySalesTeamSendSMS/{repertoireId}")
+    public ResponseEntity<ActivitySalesTeam> addActivityAffectRepSendSMS(@RequestBody ActivitySalesTeam activitySalesTeam, @PathVariable Long repertoireId) {
+        ActivitySalesTeam addedActivitySalesTeam = activitySalesTeamService.addActivityAffectRep(activitySalesTeam, repertoireId);
+        if (addedActivitySalesTeam != null) {
+            smsServices.sendSms("+12532184720", "hihi");
             return ResponseEntity.ok(addedActivitySalesTeam);
         } else {
             return ResponseEntity.notFound().build();

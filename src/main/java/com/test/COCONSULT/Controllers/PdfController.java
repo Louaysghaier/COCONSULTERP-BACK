@@ -4,6 +4,7 @@ import com.test.COCONSULT.Entity.Contract;
 import com.test.COCONSULT.Interfaces.FileStorageService;
 
 import com.test.COCONSULT.Reposotories.ContractRepository;
+import com.test.COCONSULT.Services.LocalFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class PdfController {
@@ -26,6 +29,8 @@ public class PdfController {
     FileStorageService fileStorageService;
     @Autowired
     ContractRepository contractRepository ;
+    @Autowired
+    LocalFileStorageService localFileStorageService ;
 
     @Autowired
     public PdfController(FileStorageService fileStorageService) {
@@ -37,8 +42,12 @@ public class PdfController {
 
     @GetMapping("/pdfs/{pdfName:.+}")
     public ResponseEntity<byte[]> getPdf(@PathVariable String pdfName) throws IOException {
+        List<String> pdfs = new ArrayList<>() ;
+
+        pdfs.add(pdfName) ;
+        List<String> Finalpdfs = localFileStorageService.getMatchingImagePaths(pdfs) ;
         // Construct the full path to the PDF file
-        Path pdfPath = Paths.get(uploadDir, pdfName);
+        Path pdfPath = Paths.get(Finalpdfs.get(0));
 
         // Read the PDF bytes from the file
         byte[] pdfBytes = Files.readAllBytes(pdfPath);
@@ -53,24 +62,25 @@ public class PdfController {
     }
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file) {
+    public String uploadFile(@RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Please select a file to upload");
+            return "Please select a file to upload";
         }
 
         try {
+            // Store the file and get the file name
             String fileName = fileStorageService.storeFile(file);
-
-            // Enregistrer le fichier dans la base de données avec son nom
-            Contract contract = new Contract();   // lezim naamel haka bch yetsajjel bessmou fil base de données
+            Contract contract = new Contract();
+            // Set email provided by the user
             contract.setDescription(fileName);
-            //contractRepository.save(contract);
+            // Set other properties of Candidat as needed
 
-            return ResponseEntity.ok().body("File uploaded successfully: " + fileName);
+            //contractRepository.save(contract);
+            return "File uploaded successfully: " + fileName;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upload file: " + e.getMessage());
+            return "Failed to upload file: " + e.getMessage();
         }
+
     }
 
 }

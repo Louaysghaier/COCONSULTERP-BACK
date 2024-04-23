@@ -18,6 +18,8 @@ public interface ActivitySalesTeamService {
 
     ActivitySalesTeam addActivityAffectRep(ActivitySalesTeam activitySalesTeam, Long repertoireId) ;
 
+     ActivitySalesTeam addActivityAffectRepSendSMS(ActivitySalesTeam activitySalesTeam, Long repertoireId) ;
+
 
 
     void removeActivitySalesTeam(Long idActSale);
