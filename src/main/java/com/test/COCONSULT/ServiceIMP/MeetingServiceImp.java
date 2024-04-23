@@ -2,9 +2,11 @@ package com.test.COCONSULT.ServiceIMP;
 
 import com.test.COCONSULT.Entity.Meetings;
 import com.test.COCONSULT.Entity.Projet;
+import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.Interfaces.MeetingInterface;
 import com.test.COCONSULT.Reposotories.MeetingsRepository;
 import com.test.COCONSULT.Reposotories.ProjetRepository;
+import com.test.COCONSULT.Reposotories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class MeetingServiceImp implements MeetingInterface {
     MeetingsRepository meetingsRepository;
     @Autowired
     ProjetRepository projetRepository;
+    @Autowired
+    UserRepository userRepository;
+
 
     @Override
     public Meetings AddMeeting(Meetings meet) {
@@ -63,6 +68,15 @@ public class MeetingServiceImp implements MeetingInterface {
     @Override
     public List<Meetings> getAllMeetings() {
         return meetingsRepository.findAll();
+    }
+
+    @Override
+    public void affecterUserAmeet(Integer idMeeting, String username) {
+        Meetings meetings=meetingsRepository.findMeetingsByIdMeeting(idMeeting);
+        User user=userRepository.findByUsername(username).orElse(null);
+        user.setMeetings(meetings);
+
+
     }
 
 

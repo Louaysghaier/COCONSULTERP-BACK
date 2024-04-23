@@ -4,10 +4,12 @@ package com.test.COCONSULT.ServiceIMP;
 import com.test.COCONSULT.DTO.ResetPass;
 import com.test.COCONSULT.DTO.RoleName;
 import com.test.COCONSULT.Entity.Role;
+import com.test.COCONSULT.Entity.Team;
 import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.Interfaces.OTPInterface;
 import com.test.COCONSULT.Interfaces.UserServiceInterface;
 import com.test.COCONSULT.Reposotories.RoleRepository;
+import com.test.COCONSULT.Reposotories.TeamRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
 import com.test.COCONSULT.Services.LocalFileStorageService;
 import com.test.COCONSULT.Services.MailSenderService;
@@ -39,6 +41,8 @@ UserServiceIMP implements UserServiceInterface {
     LocalFileStorageService localFileStorageService;
     @Autowired
     OTPInterface otpInterface;
+    @Autowired
+    TeamRepository teamRepository;
 
     public List<User> getAllUser() {
         return userRepository.findAll();
@@ -234,7 +238,28 @@ UserServiceIMP implements UserServiceInterface {
         }
         return userRepository.findByUsername(username);
     }
-public ResponseEntity<?> userforgetpassword(String email) {
+
+    @Override
+    public void affecterUseraTeam(Long idUser, String teamName) {
+        User user=userRepository.findUserById(idUser);
+        Team team=teamRepository.findTeamByTeamName(teamName);
+        team.setTeamLeader(teamName);
+        teamRepository.save(team);
+
+
+
+    }
+
+    @Override
+    public void affecterTeamLeaderAteam(String username, String teamName) {
+        User user=userRepository.findByUsername(username).orElse(null);
+        Team team=teamRepository.findTeamByTeamName(teamName);
+        team.setTeamLeader(username);
+        teamRepository.save(team);
+
+    }
+
+    public ResponseEntity<?> userforgetpassword(String email) {
     Optional<User> user = userRepository.findByEmail(email);
     if (user.isPresent()) {
        // String url = "http://localhost:4200/#/verifCaptch" ;

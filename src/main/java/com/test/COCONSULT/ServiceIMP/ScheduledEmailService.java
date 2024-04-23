@@ -28,7 +28,7 @@ public class ScheduledEmailService {
 
         for (Tickets ticket : openTickets) {
             String userEmail = ticket.getUser().getEmail();
-            String subject = "Ticket en attente de résolution : " + ticket.getTickettitle() + " (ID: " + ticket.getIdTicket() + ")";
+            String subject = "Ticket en attente+ de résolution : " + ticket.getTickettitle() + " (ID: " + ticket.getIdTicket() + ")";
             String body = "Cher utilisateur,\n\n" +
                     "Vous avez un ticket en attente de résolution. Merci de le traiter dès que possible.\n\n" +
                     "Titre du ticket : " + ticket.getTickettitle() + "\n" +

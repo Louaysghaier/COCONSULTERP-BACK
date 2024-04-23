@@ -46,6 +46,14 @@ public class User {
 
     private Set <Role> roles = new HashSet<>();
 
+    @ManyToOne
+    private Team team;
+
+    @ManyToOne
+    private Meetings meetings;
+
+
+
 
     public User(String name, String username, String email, String password, boolean blocked, String address, boolean valid) {
 

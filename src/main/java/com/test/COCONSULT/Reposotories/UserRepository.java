@@ -19,6 +19,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     List<User> findByRolesContains(Role role);
 
+    User findUserById(Long id);
+
     /*@Query("SELECT u FROM User u JOIN u.bilan b ORDER BY b.sum_total ASC")
     List<User> findUsersOrderByBilanSum_totalAsc();
     @Query("SELECT u FROM User u INNER JOIN u.roles r LEFT JOIN u.bilan b WHERE r.name = :roleName ORDER BY b.sum_total ASC")

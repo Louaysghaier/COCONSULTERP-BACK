@@ -18,6 +18,11 @@ public interface MeetingInterface {
 
     public List<Meetings> getAllMeetings();
 
+    void affecterUserAmeet(Integer idMeeting, String username);
+
+
+
+
 
 
 

@@ -1,13 +1,11 @@
 package com.test.COCONSULT.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.test.COCONSULT.DTO.TypeMeet;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -16,18 +14,19 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class Meetings implements Serializable {
+public class Team implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idMeeting;
-    private Timestamp dateMeeting;
-    @Enumerated(EnumType.STRING)
-    private TypeMeet typeMeet;
-    @ManyToOne
+    private Integer idTeam;
+    private Integer capacity;
+    private String teamLeader;
+    private String teamName;
     @JsonIgnore
-    private Projet projets;
     @OneToMany
     private Set<User> users;
+
+
+
 
 
 }
