@@ -26,6 +26,7 @@ public class Expanses implements Serializable {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "idProjet")
     Projets projets;
 
 }

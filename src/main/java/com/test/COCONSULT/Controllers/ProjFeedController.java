@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/projfeeds")
 public class ProjFeedController {
 
-    private final ProjFeedService projFeedService;
+    private ProjFeedService projFeedService;
 
     @Autowired
     public ProjFeedController(ProjFeedService projFeedService) {
@@ -58,4 +58,29 @@ public class ProjFeedController {
         projFeedService.removeProjFeed(idProjFeed);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/{id}/projects")
+    public ResponseEntity<List<ProjFeed>> getProjFeedWithProjects(@PathVariable("id") Long id) {
+        List<ProjFeed> projFeeds = projFeedService.getProjFeedWithProjects(id);
+        return ResponseEntity.ok(projFeeds);
+    }
+
+
+    @GetMapping("/updatedAfterDate/{date}")
+    public ResponseEntity<List<ProjFeed>> getProjFeedUpdatedAfterDate(@PathVariable("date") String date) {
+        List<ProjFeed> projFeeds = projFeedService.getProjFeedsUpdatedAfterDate(date);
+        return ResponseEntity.ok(projFeeds);
+    }
+
+    @GetMapping("/last/{limit}")
+    public ResponseEntity<List<ProjFeed>> getLastProjFeeds(@PathVariable("limit") int limit) {
+        List<ProjFeed> projFeeds = projFeedService.getLastProjFeeds(limit);
+        return ResponseEntity.ok(projFeeds);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getTotalProjFeedsCount() {
+        Long count = projFeedService.getTotalProjFeedsCount();
+        return ResponseEntity.ok(count);
+    }
+
 }

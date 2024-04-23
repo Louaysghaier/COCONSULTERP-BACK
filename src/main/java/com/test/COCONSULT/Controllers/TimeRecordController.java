@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/time-records")
@@ -57,5 +58,29 @@ public class TimeRecordController {
     public ResponseEntity<Void> removeTimeRecord(@PathVariable("idTimeRec") Long idTimeRec) {
         timeRecordService.removeTimeRec(idTimeRec);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/getTimeRecForProject/{projectId}")
+    public ResponseEntity<List<TimeRecord>> getTimeRecordsForProject(@PathVariable("projectId") Long projectId) {
+        List<TimeRecord> timeRecords = timeRecordService.getTimeRecordsForProject(projectId);
+        return ResponseEntity.ok(timeRecords);
+    }
+
+
+    @GetMapping("/getTotalTimeForProject/{projectId}")
+    public ResponseEntity<Double> getTotalTimeForProject(@PathVariable("projectId") Long projectId) {
+        Double totalTime = timeRecordService.getTotalTimeForProject(projectId);
+        return ResponseEntity.ok(totalTime);
+    }
+
+    @GetMapping("/getTimeRecByCriteria")
+    public ResponseEntity<List<TimeRecord>> retrieveTimeRecordsByCriteria(@RequestParam Map<String, String> criteria) {
+        List<TimeRecord> timeRecords = timeRecordService.retrieveTimeRecByCriteria(criteria);
+        return ResponseEntity.ok(timeRecords);
+    }
+
+    @PostMapping("/{timeRecordId}/assign/{projectId}")
+    public void assignTimeRecordToProject(@PathVariable Long timeRecordId, @PathVariable Long projectId) {
+        timeRecordService.assignTimeRecordToProject(timeRecordId, projectId);
     }
 }

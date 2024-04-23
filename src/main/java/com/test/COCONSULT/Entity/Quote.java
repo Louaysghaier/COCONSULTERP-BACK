@@ -27,6 +27,7 @@ public class Quote implements Serializable {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "idProjet")
     private Projets projets;
 
     @JsonIgnore

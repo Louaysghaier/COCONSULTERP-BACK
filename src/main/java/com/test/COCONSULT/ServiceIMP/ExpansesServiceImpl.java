@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +44,19 @@ public class ExpansesServiceImpl implements ExpansesService {
     @Override
     public void removeExpanses(Long idExpanses) {
         expansesRepository.deleteById(idExpanses);
+    }
+    @Override
+    public List<Expanses> getExpansesForProject(Long projectId) {
+        return expansesRepository.findByProjetsIdProjet(projectId);
+    }
+
+    @Override
+    public List<Expanses> getExpansesUpdatedAfterDate(Long projectId, LocalDate date) {
+        return expansesRepository.findByProjetsIdProjetAndDateAfter(projectId, date);
+    }
+
+    @Override
+    public List<Expanses> getLastExpanses(Long projectId, int limit) {
+        return expansesRepository.findTopNByProjetsIdProjetOrderByDateDesc(projectId);
     }
 }

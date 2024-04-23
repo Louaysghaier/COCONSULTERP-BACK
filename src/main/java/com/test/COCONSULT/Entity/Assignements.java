@@ -21,8 +21,10 @@ public class Assignements implements Serializable {
     private LocalDate timeRecording;
     private Double expenses;
 
+
     @JsonIgnore
     @OneToOne
+    //@JoinColumn(name= "idProjet")
     Projets projets;
 
 }

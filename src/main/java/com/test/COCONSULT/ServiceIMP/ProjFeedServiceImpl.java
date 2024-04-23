@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -39,5 +40,31 @@ public class ProjFeedServiceImpl implements ProjFeedService {
     @Override
     public void removeProjFeed(Long idProjFeed) {
         projFeedRepository.deleteById(idProjFeed);
+    }
+
+    @Override
+    public List<ProjFeed> getProjFeedsForProject(Long projectId) {
+        return projFeedRepository.findProjFeedByIdPjtFeed(projectId);
+    }
+    @Override
+    public List<ProjFeed> getProjFeedWithProjects(Long projectId) {
+        return projFeedRepository.findProjFeedByIdPjtFeed(projectId);
+    }
+
+    @Override
+    public List<ProjFeed> getProjFeedsUpdatedAfterDate(String date) {
+        LocalDate parsedDate = LocalDate.parse(date);
+        return projFeedRepository.findByTimeUpdAfter(parsedDate);
+    }
+
+
+    @Override
+    public List<ProjFeed> getLastProjFeeds(int limit) {
+        return projFeedRepository.findTopNByOrderByTimeUpdDesc();
+    }
+
+    @Override
+    public long getTotalProjFeedsCount() {
+        return projFeedRepository.count();
     }
 }

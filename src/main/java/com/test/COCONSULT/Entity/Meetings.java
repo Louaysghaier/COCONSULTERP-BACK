@@ -20,6 +20,9 @@ public class Meetings implements Serializable {
     private LocalDate dateMeeting;
     @Enumerated(EnumType.STRING)
     private TypeMeet typeMeet;
+    @Transient
+    private Quote quote;
+
     @ManyToOne
     private Projets projets;
 

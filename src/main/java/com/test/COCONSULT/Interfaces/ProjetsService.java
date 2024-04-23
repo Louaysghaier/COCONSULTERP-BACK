@@ -1,5 +1,6 @@
 package com.test.COCONSULT.Interfaces;
 
+import com.test.COCONSULT.Entity.Assignements;
 import com.test.COCONSULT.Entity.Projets;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface ProjetsService {
     Projets retrieveProjets(Long idProjets);
 
     void removeProjets(Long idProjets);
+
+    List<Assignements> getAssignementsForProject(Long projectId);
+
 }

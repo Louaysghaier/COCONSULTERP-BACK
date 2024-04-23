@@ -35,6 +35,10 @@ public class MeetingsServiceImpl implements MeetingsService {
     }
 
     @Override
+    public List<Meetings> getMeetingsForProject(Long projectId) {
+        return meetingsRepository.findByProjetsIdProjet(projectId);    }
+
+    @Override
     public Meetings retrieveMeet(Long idMeet) {
         Optional<Meetings> meetingsOptional = meetingsRepository.findById(idMeet);
         return meetingsOptional.orElse(null);
