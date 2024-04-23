@@ -29,13 +29,15 @@ public class User {
     private String token;
     private Date joinDate;
     private double soldeConge;
+    private String exp;
+    private String image;
 
 
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
     private Set<GroupChat> groupChats = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @ToString.Exclude
 

@@ -30,10 +30,25 @@ public class SalaireController {
         salaireServiceIMP.deleteSalaire(idSalaire);
     }
 
+    @PutMapping("/update-salaire")
+    public void updateSalaire(@RequestBody Salaire s) {
+        salaireServiceIMP.updateSalaire(s);
+    }
+
     @GetMapping("/get-salaire-by-user/{idUser}")
     public List<Salaire> getSalaireByUser(
            @PathVariable("idUser") Long  idUser) {
         return salaireServiceIMP.getSalaireByUser(idUser);
+    }
+
+    @PostMapping("/add-salaireeee")
+    public void addSalaire( ) {
+        salaireServiceIMP.addSalaireToUser();
+    }
+
+    @GetMapping("/getall-salaire")
+    public List<Salaire> getAllSalaire() {
+        return salaireServiceIMP.get();
     }
 
 

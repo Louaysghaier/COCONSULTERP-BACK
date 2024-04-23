@@ -101,6 +101,9 @@ public class EvaluationServiceImpl implements EvaluationService {
                 salaire.setDate(Date.from(new Date().toInstant()));
                 salaire.setCurrency("TND");
                 user.getSalaires().add(salaire);
+                for (Prime prime : primes) {
+                    primeRepository.delete(prime);
+                }
                 userRepository.save(user);
             }
         }

@@ -1,8 +1,11 @@
 package com.test.COCONSULT.ServiceIMP;
 
+import com.test.COCONSULT.DTO.RoleName;
+import com.test.COCONSULT.Entity.Role;
 import com.test.COCONSULT.Entity.Salaire;
 import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.Interfaces.SalaireServiceInterface;
+import com.test.COCONSULT.Reposotories.RoleRepository;
 import com.test.COCONSULT.Reposotories.SalaireRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,9 @@ public class SalaireServiceIMP implements SalaireServiceInterface {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
 
     @Override
@@ -54,6 +60,10 @@ public class SalaireServiceIMP implements SalaireServiceInterface {
 
     @Override
     public void deleteSalaire(int idSalaire) {
+        Salaire salaire = salaireRepository.findById(idSalaire).get();
+        User user = userRepository.findById(salaire.getUser().getId()).get();
+        user.getSalaires().remove(salaire);
+        userRepository.save(user);
         salaireRepository.deleteById(idSalaire);
     }
 
@@ -67,8 +77,37 @@ public class SalaireServiceIMP implements SalaireServiceInterface {
         return salaireRepository.findByUser_Id(idUser);
     }
 
+    public List<Salaire> get(){
+        return salaireRepository.findAll();
+    }
     @Override
     public Salaire updateSalaire(Salaire salaire) {
         return salaireRepository.save(salaire);
+    }
+
+    //add salaire to user based on role and check exp is junior or senior
+    public Salaire addSalaireToUser(){
+        Salaire salaire = new Salaire();
+        salaire.setImpot(30);
+        salaire.setCurrency("TND");
+        salaire.setDate(Date.from(new Date().toInstant()));
+        Role role = roleRepository.findByName(RoleName.valueOf("Employee"))
+                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+        List<User> users = userRepository.findByRolesContains(role);
+
+        for(User user : users){
+            Set<Salaire> setSalaires = user.getSalaires();
+                salaire.setUser(user);
+                if(user.getExp().equals("Junior")){
+                    salaire.setSalaire(1500);
+                }else if(user.getExp().equals("Senior")){
+                    salaire.setSalaire(2500);
+                }
+                setSalaires.add(salaire);
+                user.setSalaires(setSalaires);
+                userRepository.save(user);
+                salaireRepository.save(salaire);
+        }
+        return salaire;
     }
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SalaireRepository extends JpaRepository<Salaire,Integer> {
     List<Salaire> findByUser_Id(Long idUser);
+
 }
