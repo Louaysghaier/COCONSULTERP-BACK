@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthEntryPoint jwtAuthEntryPoint;
     @Autowired
-   private CorsConfigurationSource corsConfigurationSource;
+   private CorsConfig corsConfigurationSource;
 
 
 
@@ -86,16 +86,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/refreshToken").permitAll() // Permit access to refreshToken endpoint
-
                 .antMatchers("/**").permitAll()
-               // .anyRequest().authenticated() // Require authentication for any other endpoint
+                .and()
 
+                // Secure APIs for social login using OAuth2
+                .oauth2Login()
+                .defaultSuccessUrl("/oauth2/success")
+                .failureUrl("/oauth2/failure")
                 .and()
                 .httpBasic();
-                
-                 http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-               .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
     }
+
+
 
   /* @Bean
     public CorsConfigurationSource corsConfigurationSource() {
