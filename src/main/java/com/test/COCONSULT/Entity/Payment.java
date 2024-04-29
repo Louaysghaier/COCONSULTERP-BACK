@@ -4,7 +4,9 @@ import lombok.*;
 import com.test.COCONSULT.DTO.TypePayment;
 
 
+import javax.naming.Name;
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,7 +23,9 @@ public class Payment {
     private TypePayment PayMetho ;
     private Boolean Done ;
 
-    @JsonIgnore
-    @ManyToOne
-    private Contract contracts ;
+    private double Amount  ;
+    private LocalDate DatePayement ;
+
+    private Name String ;
+
 }

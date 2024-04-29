@@ -12,6 +12,7 @@ public interface ContractService {
     Contract addContract(Contract contract) ;
     Contract addContractAffectRep(Contract contract, Long repertoireId) ;
     Contract retrieveContract(Long idContract);
+    Contract updateContractAffectRep(Contract updatedContract, Long contractId, Long repertoireId) ;
 
     public String getRepertoireContactByContractId(Long idContract) ;
 

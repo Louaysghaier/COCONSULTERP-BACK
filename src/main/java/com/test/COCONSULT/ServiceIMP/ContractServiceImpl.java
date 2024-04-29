@@ -44,6 +44,40 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
+    public Contract updateContractAffectRep(Contract updatedContract, Long contractId, Long repertoireId) {
+        // Retrieve the existing contract from the database
+        Optional<Contract> optionalContract = contractRepository.findById(contractId);
+
+        if (optionalContract.isPresent()) {
+            Contract existingContract = optionalContract.get();
+
+            // Update contract details with the new values
+            existingContract.setDescription(updatedContract.getDescription());
+            existingContract.setDateContract(updatedContract.getDateContract());
+            existingContract.setMontant(updatedContract.getMontant());
+            existingContract.setNbreTranche(updatedContract.getNbreTranche());
+            existingContract.setEtape(updatedContract.getEtape());
+            // Update other fields as needed
+
+            // Update the associated repertoire
+            Repertoire repertoire = repertoireRepository.findById(repertoireId).orElse(null);
+            if (repertoire != null) {
+                existingContract.setRepertoire(repertoire);
+                // Automatically set repertoireContact to the Contact attribute of Repertoire
+                existingContract.setRepertoireContact(repertoire.getContact());
+            }
+
+            // Save the updated contract
+            return contractRepository.save(existingContract);
+        } else {
+            // Contract with the given ID not found
+            return null;
+        }
+    }
+
+
+
+    @Override
     public Contract retrieveContract(Long idContract) {
         Optional<Contract> ContractOptional = contractRepository.findById(idContract);
         return ContractOptional.orElse(null);

@@ -1,11 +1,20 @@
 package com.test.COCONSULT.Controllers;
 
+import com.test.COCONSULT.DTO.EtapeContract;
 import com.test.COCONSULT.Entity.Contract;
 import com.test.COCONSULT.Interfaces.ContractService;
+import com.test.COCONSULT.Interfaces.IpdfContarct;
+import com.test.COCONSULT.Services.PDFGenerationService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping("Contract")
@@ -13,6 +22,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ContarctController{
     private final ContractService contractService ;
+    private final PDFGenerationService pdfGenerationService;
+
+
 
     @GetMapping("/GetAllContract")
     public ResponseEntity<List<Contract>> retrieveContract() {
@@ -36,7 +48,7 @@ public class ContarctController{
     }
 
     @PostMapping("/ajouterContract/{repertoireId}")
-    public ResponseEntity<Contract> addContratAffectRepo(@RequestBody Contract contract, @PathVariable Long repertoireId) {
+    public ResponseEntity<Contract> addContrat(@RequestBody Contract contract, @PathVariable Long repertoireId) {
         Contract addedContract = contractService.addContractAffectRep(contract, repertoireId);
         if (addedContract != null) {
             return ResponseEntity.ok(addedContract);
@@ -44,6 +56,19 @@ public class ContarctController{
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/updateContractAffectRepo/{contractId}/repertoire/{repertoireId}")
+    public ResponseEntity<Contract> updateContract(@RequestBody Contract updatedContract,
+                                                   @PathVariable Long contractId,
+                                                   @PathVariable Long repertoireId) {
+        Contract updated = contractService.updateContractAffectRep(updatedContract, contractId, repertoireId);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @PutMapping("/updateContract/{id}")
     public ResponseEntity<Contract> updateContract(@PathVariable("id") Long idContract, @RequestBody Contract contract) {
@@ -79,5 +104,29 @@ public class ContarctController{
         List<Contract> contracts = contractService.retrieveContractsWithRepertoireContact();
         return ResponseEntity.ok(contracts);
     }
+
+
+    @PostMapping("/ajouterContractAndGeneratePdf/{repertoireId}")
+    public ResponseEntity<byte[]> addContractAndGeneratePdf(@RequestBody Contract contract, @PathVariable Long repertoireId) {
+        Contract addedContract = contractService.addContractAffectRep(contract, repertoireId);
+        if (addedContract != null) {
+            try {
+                byte[] pdfBytes = pdfGenerationService.generatePdf(addedContract.getIdContract());
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                // Optionally, you can set the filename in the response headers
+                headers.setContentDispositionFormData("filename", "contract.pdf");
+                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            } catch (IOException e) {
+                // Handle PDF generation error
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
 
 }

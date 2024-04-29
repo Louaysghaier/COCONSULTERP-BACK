@@ -27,9 +27,6 @@ public class Contract {
     @Enumerated(EnumType.STRING)
     private EtapeContract Etape ;
 
-    @JsonIgnore
-    @OneToMany (mappedBy = "contracts")
-    private List<Payment> payments ;
 
 
     @JsonIgnore
