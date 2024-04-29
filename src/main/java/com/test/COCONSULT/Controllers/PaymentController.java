@@ -7,8 +7,10 @@ import com.test.COCONSULT.Interfaces.PaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("Payment")
 @RestController
@@ -53,5 +55,11 @@ public class PaymentController {
     public ResponseEntity<Void> removePayment(@PathVariable("id") Long idPayment) {
         paymentService.removePayment(idPayment);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/upload-payments-data")
+    public ResponseEntity<?> uploadPaymentsData(@RequestParam("file") MultipartFile file){
+        this.paymentService.savePaymentsToDatabase(file);
+        return ResponseEntity.ok(Map.of("Message" , "Payments data uploaded and saved to database successfully"));
     }
 }

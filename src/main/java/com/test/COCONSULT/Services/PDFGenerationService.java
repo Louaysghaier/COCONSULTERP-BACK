@@ -2,7 +2,14 @@ package com.test.COCONSULT.Services;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 import com.test.COCONSULT.Entity.Contract;
@@ -32,6 +39,15 @@ public class PDFGenerationService implements IpdfContarct {
 
 
     public byte[] generatePdf(Long contractId) throws IOException {
+        Date currentDate = new Date();
+
+        // Format the date as yyyy-MM-dd
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(currentDate);
+
+        // Get nanoseconds
+        long nanoTime = System.nanoTime();
+
 
 
         Optional<Contract> contract = contractRepository.findById(contractId) ;
@@ -153,6 +169,24 @@ public class PDFGenerationService implements IpdfContarct {
                 contentStream.drawImage(signatureImageLeft, 50, 50, 100, 50);
                 contentStream.drawImage(signatureImageRight, page.getMediaBox().getWidth() - 150, 50, 100, 50);*/
             }
+            Optional<Contract> contractOptional = contractRepository.findById(contractId);
+            // Saving the pdf as a physical file that can be accessed later in path: filePAth
+            String filename = "contract_" + formattedDate + "_" + nanoTime + ".pdf";
+            String filePath = "C:/Users/MSI/Desktop/4éme SE (Esprit)/SEM2/PI/COCONSULTERP-BACK/src/main/resources/uploads/" + filename;
+            File outputFile = new File(filePath);
+            if (contractOptional.isPresent()) {
+                Contract contract1 = contractOptional.get();
+
+                // Setting the description
+                contract1.setDescription(filename);
+                contractRepository.save(contract1);
+            }
+
+            try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+                document.save(outputStream);
+
+
+                }
 
             try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
                 document.save(byteArrayOutputStream);

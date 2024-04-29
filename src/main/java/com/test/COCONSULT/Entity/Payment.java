@@ -1,5 +1,4 @@
 package com.test.COCONSULT.Entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import com.test.COCONSULT.DTO.TypePayment;
 
@@ -23,9 +22,9 @@ public class Payment {
     private TypePayment PayMetho ;
     private Boolean Done ;
 
-    private double Amount  ;
+    private double Revenue  ;
     private LocalDate DatePayement ;
 
-    private Name String ;
+    private String Name ;
 
 }
