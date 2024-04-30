@@ -4,6 +4,7 @@ import com.test.COCONSULT.DTO.RoleName;
 import com.test.COCONSULT.Entity.Role;
 import com.test.COCONSULT.ServiceIMP.RoleServiceIMP;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,10 @@ RoleServiceIMP roleServiceIMP;
     public void AddALLRoles() {
         roleServiceIMP.AddALLRoles();
     }
-
+    @PutMapping("/updateuserrole/{roleName}/{idUser}")
+    public ResponseEntity<String> updateuserrole (@PathVariable("roleName") String roleName, @PathVariable("idUser") Long idUser){
+       return roleServiceIMP.updateuserrole(roleName,idUser);
+    }
 /*
    @PutMapping("/deleteRole/{roleName}")
 @PreAuthorize("hasRole('ROLE_ADMIN')")

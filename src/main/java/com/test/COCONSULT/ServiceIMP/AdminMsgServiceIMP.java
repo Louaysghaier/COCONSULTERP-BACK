@@ -51,23 +51,26 @@ public class AdminMsgServiceIMP implements AdminMsgInterface {
 
         }
     }
-    public void sendNotification(Long adminMsgId, String message, List<Long>  recipients) {
+    public void sendNotification(Long adminMsgId, String Title, String s, List<Long>  recipients) {
         // Create a new notification
+        // Update the flag in AdminMsg indicating that notification has been sent
+        Optional<AdminMsg> adminMsgOptional = adminMsgRepository.findById(adminMsgId);
         Notification notification = Notification.builder()
                 .date(new Date())
-                .title(message)
-                .adminMsgId(adminMsgRepository.findById(adminMsgId).orElse(null))
+                .title(Title)
+                .message(s)
+                .adminMsgId(adminMsgOptional.get())
                 .recipients(userRepository.findAllById(recipients))
                 .build();
 
+
+        if(adminMsgOptional.isPresent()){
+            AdminMsg adminMsg = adminMsgOptional.get();
+            adminMsg.setNotificationSent(true);
+            adminMsgRepository.save(adminMsg);
+        }
         // Save the notification
         notificationRepository.save(notification);
 
-        // Update the flag in AdminMsg indicating that notification has been sent
-        Optional<AdminMsg> adminMsgOptional = adminMsgRepository.findById(adminMsgId);
-        adminMsgOptional.ifPresent(adminMsg -> {
-            adminMsg.setNotificationSent(true);
-            adminMsgRepository.save(adminMsg);
-        });
     }
 }

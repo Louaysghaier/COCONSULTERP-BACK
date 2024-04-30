@@ -40,7 +40,7 @@ public class AdminMsgController {
     }
 
     @PostMapping("/sendNotification")
-    public void sendNotification(@RequestParam Long adminMsgId, @RequestParam String message, @RequestParam List<Long> recipients) {
-        adminMsgServiceIMP.sendNotification(adminMsgId, message, recipients);
+    public void sendNotification(@RequestParam Long adminMsgId, @RequestParam String Title,@RequestParam String message, @RequestParam List<Long> recipients) {
+        adminMsgServiceIMP.sendNotification(adminMsgId, Title,message, recipients);
     }
 }

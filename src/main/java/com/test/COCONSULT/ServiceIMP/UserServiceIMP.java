@@ -160,7 +160,42 @@ UserServiceIMP implements UserServiceInterface {
             }
         }
     }
+    public ResponseEntity<User> registerUserViaGoogle (User user1, String roleName) {
 
+
+        User user = new User(null, null, user1.getEmail(), null, false, user1.getAddress(), true);
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepository.findByName(RoleName.valueOf(roleName.trim()))
+                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+        roles.add(userRole);
+        user.setRoles(roles);
+        user.setValid(true);
+        //user.setAddress(user1.getAddress());
+       // user.setNumber(user1.getNumber());
+        User suser = userRepository.save(user);
+        if (suser != null) {
+            //String Newligne = System.getProperty("line.separator");
+            //String url = "http://localhost:4200/#/verification" ;
+           // String verificationCode = otpInterface.GenerateOTp().getIdentification(); // Replace with your actual verification code
+            String newLine = "<br/>"; // HTML line break
+            String htmlMessage = "<div style='border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;'>"
+                    + "Soyez le bienvenue dans notre plateforme" + newLine
+                    + "S-il vous plait completer votre données  " + newLine
+                   // + "<a href='" + url + "'>" + url + "</a>" + newLine
+                   // + "<strong>Verification Code ! max 5 min ! :</strong> " + verificationCode + newLine
+                    + "</div>";
+            try {
+                mailSending.send(user.getEmail(), "Welcome"+ user.getName() , htmlMessage);
+                return new ResponseEntity<User>(user, HttpStatus.OK);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+    }
     public ResponseEntity<User> registerUser(User user1, String roleName) {
         if (userRepository.existsByUsername(user1.getUsername())) {
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
@@ -323,6 +358,7 @@ public ResponseEntity<?> userforgetpassword(String email) {
 
         }
     }
+
 }
 
 

@@ -80,15 +80,18 @@ public class OAuth2Controller {
 
         // Check if the user already exists in your database
         Optional<User> existingUserOptional = userRepository.findByEmail(payload.getEmail());
-
+        User user = new User();
+        user.setEmail(payload.getEmail());
+        //user.setUsername(payload.getEmail());
         if (existingUserOptional.isPresent()) {
             // User exists, generate and return JWT tokens
             User existingUser = existingUserOptional.get();
             JwtResponse tokenRes = generateTokens(existingUser);
             return ResponseEntity.ok(tokenRes);
         } else {
-            userServiceIMP.registerUser(existingUserOptional.get(), "ROLE_USER");
-            JwtResponse tokenRes = generateTokens(existingUserOptional.get());
+            userServiceIMP.registerUserViaGoogle(user, "ROLE_USER");
+            User newUser = userRepository.findByEmail(payload.getEmail()).get();
+            JwtResponse tokenRes = generateTokens(newUser);
             return ResponseEntity.ok(tokenRes);
         }
     }

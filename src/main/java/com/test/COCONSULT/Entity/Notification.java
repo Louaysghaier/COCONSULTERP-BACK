@@ -21,8 +21,10 @@ public class Notification {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date=new Date();
     private String title;
+    private String message;
     @OneToOne
     private AdminMsg adminMsgId; // Reference to the associated AdminMsg
     @ManyToMany
+
     private List<User> recipients; // Recipients of the notification (can be email addresses, user IDs, etc.)
 }
