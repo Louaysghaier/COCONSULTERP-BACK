@@ -39,8 +39,8 @@ public class AdminMsgController {
         adminMsgServiceIMP.sendmsg(adminMsgId, idUsers);
     }
 
-    @PostMapping("/sendNotification")
-    public void sendNotification(@RequestParam Long adminMsgId, @RequestParam String Title,@RequestParam String message, @RequestParam List<Long> recipients) {
+    @PostMapping("/sendNotification/{adminMsgId}/{Title}/{message}/{recipients}")
+    public void sendNotification(@PathVariable ("adminMsgId") Long adminMsgId,@PathVariable  ("Title") String Title,@PathVariable ("message") String message, @PathVariable ("recipients") List<String> recipients) {
         adminMsgServiceIMP.sendNotification(adminMsgId, Title,message, recipients);
     }
 }

@@ -185,7 +185,7 @@ UserServiceIMP implements UserServiceInterface {
                    // + "<strong>Verification Code ! max 5 min ! :</strong> " + verificationCode + newLine
                     + "</div>";
             try {
-                mailSending.send(user.getEmail(), "Welcome"+ user.getName() , htmlMessage);
+                mailSending.send(user.getEmail(), "CoConsult Says Welcome" , htmlMessage);
                 return new ResponseEntity<User>(user, HttpStatus.OK);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
