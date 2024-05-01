@@ -28,4 +28,8 @@ public class NotificationController {
     public List<Notification> getAllNotifications() {
         return NotificatinInterface.getAllNotifications();
     }
+@GetMapping("/getNotificationByuser/{id}")
+    public List<Notification> getNotificationByuser(@PathVariable ("id") Long id) {
+        return NotificatinInterface.getNotificationByuser(id);
+    }
 }

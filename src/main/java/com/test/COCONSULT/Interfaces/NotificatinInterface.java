@@ -10,4 +10,5 @@ public interface NotificatinInterface {
   //  Notification updateNotification(Notification notification);
     void deleteNotification(Long id);
     List<Notification> getAllNotifications();
+    List<Notification> getNotificationByuser(Long id);
 }
