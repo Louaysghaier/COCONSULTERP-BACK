@@ -1,11 +1,14 @@
 package com.test.COCONSULT.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.test.COCONSULT.DTO.EtapeContract;
+
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,9 +26,22 @@ public class Contract {
     private LocalDate DateContract ;
     private double Montant ;
     private int NbreTranche ;
+    private String referenceContract;
 
     @Enumerated(EnumType.STRING)
     private EtapeContract Etape ;
+
+    @ElementCollection
+    private List<Boolean> installmentPaid;
+
+
+    public List<Boolean> getInstallmentPaid() {
+        return installmentPaid;
+    }
+
+    public void setInstallmentPaid(List<Boolean> installmentPaid) {
+        this.installmentPaid = installmentPaid;
+    }
 
 
 
@@ -36,7 +52,6 @@ public class Contract {
 
     private String repertoireContact;
 
-
     public String getRepertoireContact() {
         return repertoireContact;
     }
@@ -44,6 +59,13 @@ public class Contract {
     public void setRepertoireContact(String repertoireContact) {
         this.repertoireContact = repertoireContact;
     }
+
+   /* @JsonIgnore
+    // Initialize invoices list with an empty ArrayList
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    private List<Invoice> invoices = new ArrayList<>();*/
+
+
 
 
 }

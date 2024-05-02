@@ -1,9 +1,10 @@
 package com.test.COCONSULT.Entity;
-import lombok.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.test.COCONSULT.DTO.TypePayment;
+import com.test.COCONSULT.Entity.Contract;
+import lombok.*;
 
-
-import javax.naming.Name;
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -17,14 +18,12 @@ import java.time.LocalDate;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPayment ;
-    @Enumerated(EnumType.STRING)
-    private TypePayment PayMetho ;
-    private Boolean Done ;
+    private Long idPayment;
 
-    private double Revenue  ;
-    private LocalDate DatePayement ;
+    private LocalDate paymentDate;
+    private double amount;
+    private TypePayment paymentMethod;
+    private String referenceNumber;
 
-    private String Name ;
 
 }

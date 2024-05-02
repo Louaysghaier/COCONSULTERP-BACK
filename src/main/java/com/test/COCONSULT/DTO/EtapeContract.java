@@ -7,4 +7,6 @@ public enum EtapeContract {
     NEGOCIATION ,
     CONCLU ,
     PERDU ,
+
+    TERMINE ,
 }

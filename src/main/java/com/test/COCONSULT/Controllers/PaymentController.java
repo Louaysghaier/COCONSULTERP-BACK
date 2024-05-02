@@ -1,6 +1,7 @@
 package com.test.COCONSULT.Controllers;
 
 import com.test.COCONSULT.Entity.Contract;
+import com.test.COCONSULT.Entity.ContractVerificationResult;
 import com.test.COCONSULT.Entity.Payment;
 import com.test.COCONSULT.Interfaces.ContractService;
 import com.test.COCONSULT.Interfaces.PaymentService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ import java.util.Map;
 public class PaymentController {
     private final PaymentService paymentService ;
 
+    private final ContractService contractService ;
     @GetMapping("/GetAllPayment")
     public ResponseEntity<List<Payment>> retrievePayment() {
         List<Payment> PaymentList = paymentService.retrievePayment();
@@ -58,8 +61,15 @@ public class PaymentController {
     }
 
     @PostMapping("/upload-payments-data")
-    public ResponseEntity<?> uploadPaymentsData(@RequestParam("file") MultipartFile file){
-        this.paymentService.savePaymentsToDatabase(file);
-        return ResponseEntity.ok(Map.of("Message" , "Payments data uploaded and saved to database successfully"));
+    public ResponseEntity<?> uploadPaymentsData(@RequestParam("file") MultipartFile file) {
+        paymentService.savePaymentsToDatabase(file);
+        return ResponseEntity.ok(Map.of("Message", "Payments data uploaded and saved to database successfully"));
+    }
+
+    @GetMapping("/verifyPayments")
+    public List<ContractVerificationResult> verifyPayments() {
+        List<Contract> contracts = contractService.retrieveContract();
+        List<Payment> payments = paymentService.retrievePayment();
+        return paymentService.verifyPayments(contracts, payments);
     }
 }
