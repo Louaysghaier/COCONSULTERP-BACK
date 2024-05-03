@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.*;
 import java.io.IOException;
 
 import java.nio.file.Files;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class PdfController {
+public class PDFController {
     @Autowired
     FileStorageService fileStorageService;
     @Autowired
@@ -33,7 +32,7 @@ public class PdfController {
     LocalFileStorageService localFileStorageService ;
 
     @Autowired
-    public PdfController(FileStorageService fileStorageService) {
+    public PDFController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 
