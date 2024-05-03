@@ -41,11 +41,6 @@ public class SalaireController {
         return salaireServiceIMP.getSalaireByUser(idUser);
     }
 
-    @PostMapping("/add-salaireeee")
-    public void addSalaire( ) {
-        salaireServiceIMP.addSalaireToUser();
-    }
-
     @GetMapping("/getall-salaire")
     public List<Salaire> getAllSalaire() {
         return salaireServiceIMP.get();

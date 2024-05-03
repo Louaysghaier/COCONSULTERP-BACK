@@ -6,13 +6,11 @@ public enum RoleName {
     ADMIN,
     Entreprise,
     Employee,
-
-
     Manager,
     HR,
     CRM,
     Consult,
-    PM,
+    PM
 
 
 }

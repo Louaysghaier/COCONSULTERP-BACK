@@ -10,6 +10,7 @@ import com.test.COCONSULT.Reposotories.CongeRepository;
 import com.test.COCONSULT.Reposotories.DemandeCongeRepository;
 import com.test.COCONSULT.Reposotories.SalaireRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
+import com.test.COCONSULT.Services.MailProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -86,8 +88,11 @@ public class DemandeCongeController {
         demandeCongeRepository.deleteById(id);
     }
 
+    @Autowired
+    private MailProject mailProject;
+
     @PostMapping("/approve-demande-conge/{id}")
-    void approveDemandeConge(@PathVariable("id") int id) {
+    public void approveDemandeConge(@PathVariable("id") int id) {
         DemandeConge demandeConge = demandeCongeRepository.findById(id).orElse(null);
         if (demandeConge != null) {
             Conge conge = new Conge();
@@ -98,6 +103,7 @@ public class DemandeCongeController {
             conge.setUser(demandeConge.getUser());
             User user = userRepository.findById(demandeConge.getUser().getId()).orElse(null);
             congeRepository.save(conge);
+
             if (user != null) {
                 if (user.getSoldeConge()==0 && demandeConge.getCertificate()==null){
                     System.out.println("no solde conge");
@@ -109,10 +115,10 @@ public class DemandeCongeController {
                         }
                     }
                     if( lastSalaire != null ){
-                      //minus the duration of days of conge *20 from the last salary
+                        //minus the duration of days of conge *20 from the last salary
                         lastSalaire.setSalaire(lastSalaire.getSalaire() - demandeConge.getDuration() * 20);
                         salaireRepository.save(lastSalaire);
-                }
+                    }
                 }
 
                 if (user.getConges() == null) {
@@ -121,9 +127,29 @@ public class DemandeCongeController {
                 } else {
                     user.getConges().add(conge);
                 }
+
                 userRepository.save(user);
+                sendApprovalEmail(user, conge);
+
             }
+
             demandeCongeRepository.deleteById(id);
+        }
+    }
+
+    private void sendApprovalEmail(User user, Conge conge) {
+        if (user != null && user.getEmail() != null) {
+            String to = user.getEmail();
+            String subject = "Approval of Leave Request";
+            String body = "Dear " + user.getName() + ",\n\n" +
+                    "Your leave request from " + conge.getDateDebut() + " to " + conge.getDateFin() +
+                    " for " + conge.getDuree() + " days has been approved.\n\n" +
+                    "Best Regards,\nYour HR Team";
+            try {
+                mailProject.send(to, subject, body);
+            } catch (MessagingException e) {
+                System.err.println("Failed to send email: " + e.getMessage());
+            }
         }
     }
 

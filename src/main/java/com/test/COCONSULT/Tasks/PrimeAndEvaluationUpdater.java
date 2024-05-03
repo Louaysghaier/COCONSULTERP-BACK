@@ -16,7 +16,7 @@ public class PrimeAndEvaluationUpdater implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // Call the method to update primes and evaluations once the application is launched
-        evaluationService.updatePrimesAndEvaluationsForUsers();
+        evaluationService.updatePrimesBasedOnEvaluation();
         evaluationService.updateSoldeForUsers();
     }
 }

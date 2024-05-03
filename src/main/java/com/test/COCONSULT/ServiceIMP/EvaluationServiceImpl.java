@@ -51,31 +51,25 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     // Method to check evaluation and add or delete prime accordingly
-    public void updatePrimesAndEvaluationsForUsers() {
+    public void updatePrimesBasedOnEvaluation() {
         List<User> users = userRepository.findAll();
-
         for (User user : users) {
             List<Evaluation> evaluations = evaluationRepository.findByUser(user);
             for (Evaluation evaluation : evaluations) {
-                // Check if the evaluation has a prime assigned and if its moy is over 5
-                if (!evaluation.isHasPrime() && evaluation.getMoy() > 5) {
-                    // Perform additional work if the evaluation moy is over 5
-                    // For example, update user's prime
+                if (!evaluation.isHasPrime() && evaluation.getMoy() > 7) {
                     Prime prime = new Prime();
-                    prime.setMontant(20); // Set your prime amount here
+                    prime.setMontant(50); // Montant pour les performances exceptionnelles
                     prime.setUser(user);
                     prime.setType(TypePrime.Rendement);
                     prime.setEvaluation(evaluation);
                     primeRepository.save(prime);
 
-                    // Update the hasPrime flag for this evaluation
                     evaluation.setHasPrime(true);
                     evaluationRepository.save(evaluation);
                 }
             }
         }
     }
-
 
 
     // Method to check sum of primes for a user and add Solde entity accordingly

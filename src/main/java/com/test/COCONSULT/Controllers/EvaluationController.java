@@ -23,7 +23,7 @@ public class EvaluationController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/add-evaluation")
+    @PostMapping("/add-evaluation/")
     public void addEvaluation(@RequestBody Evaluation evaluation) {
         evaluationService.addEvaluation(evaluation);
     }

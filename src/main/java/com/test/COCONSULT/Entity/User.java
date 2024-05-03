@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +31,11 @@ public class User {
     private Date joinDate;
     private double soldeConge;
     private String exp;
-    private String image;
+    private byte[] image;
+    private Boolean disponible = false;
+    private LocalDateTime signInTime;
+    private LocalDateTime signOutTime;
+    private Long sessionDuration;
 
 
     @ManyToMany(mappedBy = "users")
