@@ -4,21 +4,36 @@ import com.test.COCONSULT.DTO.CandidatDetailsDTO;
 import com.test.COCONSULT.Entity.Candidat;
 import com.test.COCONSULT.Entity.JobOpport;
 import com.test.COCONSULT.Interfaces.CandidatServiceInterface;
+import com.test.COCONSULT.Interfaces.FileStorageService;
+import com.test.COCONSULT.Reposotories.CandidatRepository;
+import com.test.COCONSULT.Reposotories.JobOpportRepository;
 import com.test.COCONSULT.ServiceIMP.CandidatServiceImp;
 import com.test.COCONSULT.ServiceIMP.CandidateNotificationService;
 import com.test.COCONSULT.Services.MailSenderService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.test.COCONSULT.Entity.test;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.mail.MessagingException;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -30,12 +45,99 @@ public class CandidatController {
     @Autowired
     CandidatServiceImp candidatServiceImp;
     MailSenderService mailSenderService;
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @Autowired
+    private CandidatRepository candidatRepository;
+    private JobOpportRepository jobOpportRepository;
 
 
-    @PostMapping("/createcandidat")
-    public ResponseEntity<Candidat> createCandidat(@RequestBody Candidat candidat) {
-        Candidat createdCandidat = candidatServiceInterface.createCandidat(candidat);
-        return new ResponseEntity<>(createdCandidat, HttpStatus.CREATED);
+
+
+
+    @PostMapping(value = "/candidats/{candidatId}/upload-photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadPhoto(@PathVariable int candidatId, @RequestPart("photo") MultipartFile file) {
+        // Vérifier si le candidat existe
+        Optional<Candidat> optionalCandidat = candidatRepository.findById(candidatId);
+        if (optionalCandidat.isPresent()) {
+            Candidat candidat = optionalCandidat.get();
+            String fileName = fileStorageService.storeFile(file);
+            if (!fileName.isEmpty()) {
+                // Mettre à jour le champ photo du candidat
+                candidat.setPhoto(fileName);
+                candidatRepository.save(candidat);
+                return ResponseEntity.status(HttpStatus.OK).body("Photo uploaded successfully for candidat: " + candidatId);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload photo");
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PostMapping("/createcompetence/{candidatId}")
+    public ResponseEntity<?> createCompetence(@PathVariable int candidatId, @RequestParam String competence) {
+        Optional<Candidat> optionalCandidat = candidatRepository.findById(candidatId);
+        if (optionalCandidat.isPresent()) {
+            Candidat candidat = optionalCandidat.get();
+            candidat.setCompetence(competence);
+
+            candidatRepository.save(candidat);
+
+            return ResponseEntity.ok().body("success: " + candidatId);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed");
+        }
+    }
+    @PutMapping("/updatecompetence/{candidatId}")
+    public ResponseEntity<?> updateCompetence(@PathVariable int candidatId, @RequestParam String competence) {
+        Optional<Candidat> optionalCandidat = candidatRepository.findById(candidatId);
+        if (optionalCandidat.isPresent()) {
+            Candidat candidat = optionalCandidat.get();
+            candidat.setCompetence(competence);
+
+            candidatRepository.save(candidat);
+
+            return ResponseEntity.ok().body("success: " + candidatId);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Candidat not found");
+        }
+    }
+
+    @GetMapping("competence/{id}")
+    public ResponseEntity<String> getCandidatcompetence(@PathVariable int id) {
+        Optional<Candidat> candidatOptional = candidatRepository.findById(id);
+        if (candidatOptional.isPresent()) {
+            Candidat candidat = candidatOptional.get();
+            return ResponseEntity.ok(candidat.getCompetence());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/createcandidat/{candidatId}")
+    public ResponseEntity<?> createCandidat(@PathVariable int candidatId, @RequestParam String info) {
+        Optional<Candidat> optionalCandidat = candidatRepository.findById(candidatId);
+        if (optionalCandidat.isPresent()) {
+            Candidat candidat = optionalCandidat.get();
+            candidat.setInfo(info);
+
+            candidatRepository.save(candidat);
+
+            return ResponseEntity.ok().body("success: " + candidatId);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed");
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getCandidatInfo(@PathVariable int id) {
+        Optional<Candidat> candidatOptional = candidatRepository.findById(id);
+        if (candidatOptional.isPresent()) {
+            Candidat candidat = candidatOptional.get();
+            return ResponseEntity.ok(candidat.getInfo());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/updatecandidat/{id}")
@@ -71,17 +173,14 @@ public class CandidatController {
     }
 
 
-
-
-
-
     @PostMapping("/ajouter")
     public ResponseEntity<String> ajouterTest(@RequestParam int idQuestion, @RequestParam int idQuiz, @RequestParam int idCandidat, @RequestParam String selectedAnswer) {
         candidatServiceInterface.ajouterTest(idQuestion, idQuiz, idCandidat, selectedAnswer);
         return ResponseEntity.ok("Test ajouté avec succès.");
     }
+
     @PostMapping("/ ajouterCandidatAOffre/{idJobOpport}")
-    public void ajouterCandidatAOffre(@RequestBody Candidat candidat, @PathVariable ("idJobOpport") int idJobOpport) {
+    public void ajouterCandidatAOffre(@RequestBody Candidat candidat, @PathVariable("idJobOpport") int idJobOpport) {
         candidatServiceInterface.ajouterCandidatAOffre(candidat, idJobOpport);
     }
 
@@ -91,7 +190,13 @@ public class CandidatController {
         Candidat newCandidat = candidatServiceImp.createCandidatWithOnlyEmail(email);
         return new ResponseEntity<>(newCandidat, HttpStatus.CREATED);
     }
+    @GetMapping("/email/{email}")
+    public int getCandidatIdByEmail(@PathVariable String email) {
+        Candidat candidat = candidatServiceImp.getCandidatByEmail(email);
 
+            return candidat.getId_condidat();
+
+    }
 
 
     @GetMapping("/{email}/notify")
@@ -103,7 +208,6 @@ public class CandidatController {
 
         double finalMark = getFinalMarkFromTests(candidat);
 
-        // Envoi d'e-mail
         String subject = "Your Final Mark";
         String body = "Your final mark is: " + finalMark;
 
@@ -147,7 +251,29 @@ public class CandidatController {
 
         return ResponseEntity.ok(candidatDetailsDTOList);
     }
+
+    @GetMapping("/{candidatId}/tests/{testId}")
+    public ResponseEntity<Boolean> candidatHasTakenTest(@PathVariable int candidatId, @PathVariable test testId) {
+        // Récupérer le candidat
+        Candidat candidat = candidatServiceImp.getCandidatById(candidatId);
+        if (candidat == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
+
+        // Vérifier si le candidat a passé le test
+        boolean hasTakenTest = candidatServiceImp.candidatHasTakenTest(candidat, testId);
+        return ResponseEntity.ok(hasTakenTest);
+    }
+    @GetMapping("/candidats/{email}/a-passe-test")
+    public boolean aPasseTest(@PathVariable String email) {
+        return candidatServiceImp.aPasseTestByEmail(email);
+    }
+
 }
+
+
+
+
 
 
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface JobOpportServiceInterface {
 
-        public JobOpport createJobOpport(JobOpport jobOpport);
+        public void addJobOpportunity(JobOpport jobOpport);
         JobOpport updateJobOpport(int id, JobOpport jobOpport);
         void deleteJobOpport(int id);
         List<JobOpport> getAllJobOpports();

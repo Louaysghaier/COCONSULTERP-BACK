@@ -19,14 +19,12 @@ import java.util.List;
     public class JobOpportController {
     @Autowired
 JobOpportServiceInterface jobOpportServiceInterface;
+@PostMapping("/add")
+    public void addJobOpportunity( @RequestBody  JobOpport jobOpport) {
+        jobOpportServiceInterface.addJobOpportunity(jobOpport);
+    }
 
-
-        @PostMapping("/createjobopoort")
-        public JobOpport createJobOpport(@RequestBody JobOpport jobOpport) {
-          return jobOpportServiceInterface.createJobOpport(jobOpport);
-        }
-
-        @PutMapping("/{id}")
+    @PutMapping("/{id}")
         public ResponseEntity<JobOpport> updateJobOpport(@PathVariable("id") int id, @RequestBody JobOpport jobOpport) {
             JobOpport updatedJobOpport = jobOpportServiceInterface.updateJobOpport(id, jobOpport);
             if (updatedJobOpport != null) {

@@ -2,6 +2,7 @@ package com.test.COCONSULT.Interfaces;
 
 import com.test.COCONSULT.Entity.Candidat;
 import com.test.COCONSULT.Entity.JobOpport;
+import com.test.COCONSULT.Entity.test;
 
 import java.util.List;
 
@@ -16,5 +17,6 @@ public interface CandidatServiceInterface {
     void ajouterCandidatAOffre(Candidat candidat, int idJobOpport);
     Candidat createCandidatWithOnlyEmail(String email);
     Candidat getCandidatByEmail(String email);
+    public boolean candidatHasTakenTest(Candidat candidat, test test);
 
 }

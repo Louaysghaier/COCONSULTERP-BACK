@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface JobOpportRepository extends JpaRepository<JobOpport,Integer> {
     JobOpport findById(int id_offre);
 
+
 }

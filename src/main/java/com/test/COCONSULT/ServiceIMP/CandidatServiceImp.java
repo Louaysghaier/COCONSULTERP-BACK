@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -97,6 +98,10 @@ public class CandidatServiceImp implements CandidatServiceInterface {
         // Enregistrer le candidat
         return candidatRepository.save(candidat);
     }
+    public Candidat getCandidatByEmaill(String email) {
+        return candidatRepository.findByEmail(email);
+    }
+
 
     @Override
     public void ajouterCandidatAOffre(Candidat candidat, int idJobOpport) { //dorraaaaaaaaaa
@@ -116,5 +121,19 @@ public class CandidatServiceImp implements CandidatServiceInterface {
     public List<Object[]> getCandidatDetails() {
         return candidatRepository.findCandidatDetails();
     }
+    public boolean candidatHasTakenTest(Candidat candidat, test test) {
+        // Vérifier si le candidat a passé le test en vérifiant s'il est associé au test
+        return candidat.getTest().contains(test);
+    }
+
+    public boolean aPasseTestByEmail(String email) {
+        Candidat candidat = candidatRepository.findByEmail(email);
+        if (candidat != null) {
+            return candidat.aPasseTest();
+        }
+        return false; // Le candidat n'existe pas
+    }
+
 
 }
+

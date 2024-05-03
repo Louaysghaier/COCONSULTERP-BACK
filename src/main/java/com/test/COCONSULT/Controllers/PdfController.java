@@ -106,7 +106,8 @@ public class PdfController {
     @PostMapping( "/uploadAndExtract")
     public String uploadAndExtract(@RequestParam("jobOpportId") int jobOpportId,
                                    @RequestParam("file") MultipartFile file,
-                                   @RequestParam("email") String email) {
+                                   @RequestParam("email") String email,
+    @RequestParam("nom") String nom , @RequestParam("prenom") String prenom) {
         try {
             // Vérifier si l'email du candidat existe déjà dans la base de données
             if (candidatRepository.existsByEmail(email)) {
@@ -124,10 +125,12 @@ public class PdfController {
             // Check if extracted text contains mots1 and mots2 from JobOpport
             String descriptionLowerCase = jobOpport.getDescription().toLowerCase();
             String titreLowerCase = jobOpport.getTitre().toLowerCase();
-            if (extractedText.contains(descriptionLowerCase) && extractedText.contains(titreLowerCase)) {
+            if (extractedText.contains(descriptionLowerCase) || extractedText.contains(titreLowerCase)) {
                 // Create and save Candidat entity with user-provided email
                 Candidat candidat = new Candidat();
-                candidat.setEmail(email); // Set email provided by the user
+                candidat.setEmail(email);
+                candidat.setNom(nom);
+                candidat.setPrenom(prenom);// Set email provided by the user
                 candidat.setPdfFile(fileName); // Set stored file name
                 // Set other properties of Candidat as needed
 
@@ -135,8 +138,12 @@ public class PdfController {
                 candidat.setJobOpport(jobOpport);
 
                 candidatRepository.save(candidat);
-                String siteUrl = "http://localhost:4200/#/email";
-                message = "Félicitations ! Votre CV correspond à notre offre d'emploi. Visitez notre site pour passer le coding game : <a href=\"" + siteUrl + "\">" + siteUrl + "</a>";
+
+                String realLink = "http://localhost:4200/#/myquiz/"+candidat.getEmail();
+                String fakeLink = "codinggame";
+                message = "Félicitations ! Votre CV correspond à notre offre d'emploi. Visitez notre site pour passer le coding game : <a href=\"" + realLink + "\">" + fakeLink + "</a>";
+
+
 
             } else {
                 message = "Désolé, votre CV ne correspond pas à notre offre d'emploi.";

@@ -12,4 +12,8 @@ public interface CandidatRepository extends JpaRepository<Candidat, Integer> {
     @Query("SELECT c, c.jobOpport, t.finalmark FROM Candidat c JOIN c.test t")
     List<Object[]> findCandidatDetails();
 
+    List<Candidat> findByCompetenceContaining(String competence);
+    List<Candidat> findByCompetenceInIgnoreCase(List<String> competence);
+
+
 }
