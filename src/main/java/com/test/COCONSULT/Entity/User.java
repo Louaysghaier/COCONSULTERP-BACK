@@ -38,9 +38,7 @@ public class User {
     private Long sessionDuration;
 
 
-    @ManyToMany(mappedBy = "users")
-    @JsonIgnore
-    private Set<GroupChat> groupChats = new HashSet<>();
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -50,16 +48,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set <Role> roles = new HashSet<>();
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    @ToString.Exclude
 
-    private Set<Tickets> tickets=new HashSet<>();
 
-    @JsonIgnore
-    @ToString.Exclude
-    @OneToMany (mappedBy = "userClient")
-    private Set<Quote> quotes=new HashSet<>();
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -76,12 +66,8 @@ public class User {
     @OneToMany
     @JsonIgnore
     private Set<Evaluation> evaluations;
-    @JsonIgnore
-    @ToString.Exclude
 
 
-    @OneToOne
-    private ProjFeed projFeeds;
 
     public User(String name, String username, String email, String password, boolean blocked, String address, boolean valid) {
 
