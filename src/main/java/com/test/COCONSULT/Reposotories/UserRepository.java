@@ -5,6 +5,7 @@ package com.test.COCONSULT.Reposotories;
 import com.test.COCONSULT.Entity.Role;
 import com.test.COCONSULT.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
     boolean existsByEmail(String email);
 
     List<User> findByRolesContains(Role role);
+    @Query("SELECT u.createdDate, COUNT(u) FROM User u GROUP BY u.createdDate")
+    List<Object[]> countUsersPerDay();
 
+    @Query("SELECT r.name, COUNT(u) FROM User u JOIN u.roles r GROUP BY r.name")
+    List<Object[]> countUsersByRoles();
     //List<User> findByRolesContaining(Role );
 
     /*@Query("SELECT u FROM User u JOIN u.bilan b ORDER BY b.sum_total ASC")
