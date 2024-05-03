@@ -38,8 +38,8 @@ public class PDFController {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
-
     @GetMapping("/pdfs/{pdfName:.+}")
+
     public ResponseEntity<byte[]> getPdf(@PathVariable String pdfName) throws IOException {
         List<String> pdfs = new ArrayList<>() ;
 

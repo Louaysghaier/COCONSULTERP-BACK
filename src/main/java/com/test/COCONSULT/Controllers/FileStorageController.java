@@ -29,7 +29,7 @@ private CandidatRepository candidatRepository;
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @GetMapping("/images/{imageName:.+}")
+   /* @GetMapping("/images/{imageName:.+}")
     public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
         // Extract the actual filename from the request path
        // String actualFileName = imageName.substring(imageName.indexOf("_") + 1);
@@ -48,7 +48,7 @@ private CandidatRepository candidatRepository;
         // Return the image bytes along with appropriate headers
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
-
+*/
 
 
 
