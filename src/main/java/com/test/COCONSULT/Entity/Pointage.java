@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+//@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Pointage implements Serializable {
 
