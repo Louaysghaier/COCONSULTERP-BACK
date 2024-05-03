@@ -2,17 +2,19 @@ package com.test.COCONSULT.Controllers;
 
 import com.test.COCONSULT.Entity.Contract;
 import com.test.COCONSULT.Interfaces.FileStorageService;
-
-import com.test.COCONSULT.Reposotories.ContractRepository;
-import com.test.COCONSULT.Services.LocalFileStorageService;
+import com.test.COCONSULT.Reposotories.CandidatRepository;
+import com.test.COCONSULT.Reposotories.JobOpportRepository;
+import com.test.COCONSULT.Services.MailSenderService;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 
@@ -23,16 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class PDFController {
+public class PdfControllerCandidat {
     @Autowired
     FileStorageService fileStorageService;
     @Autowired
-    ContractRepository contractRepository ;
+    ContractRepository contractRepository;
     @Autowired
-    LocalFileStorageService localFileStorageService ;
+    LocalFileStorageService localFileStorageService;
 
     @Autowired
-    public PDFController(FileStorageService fileStorageService) {
+    public PdfControllerCandidat(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 
@@ -41,10 +43,10 @@ public class PDFController {
 
     @GetMapping("/pdfs/{pdfName:.+}")
     public ResponseEntity<byte[]> getPdf(@PathVariable String pdfName) throws IOException {
-        List<String> pdfs = new ArrayList<>() ;
+        List<String> pdfs = new ArrayList<>();
 
-        pdfs.add(pdfName) ;
-        List<String> Finalpdfs = localFileStorageService.getMatchingImagePaths(pdfs) ;
+        pdfs.add(pdfName);
+        List<String> Finalpdfs = localFileStorageService.getMatchingImagePaths(pdfs);
         // Construct the full path to the PDF file
         Path pdfPath = Paths.get(Finalpdfs.get(0));
 
@@ -74,7 +76,7 @@ public class PDFController {
             contract.setDescription(fileName);
             // Set other properties of Candidat as needed
 
-            //contractRepository.save(contract);
+            // contractRepository.save(contract);
             return "File uploaded successfully: " + fileName;
         } catch (Exception e) {
             return "Failed to upload file: " + e.getMessage();
