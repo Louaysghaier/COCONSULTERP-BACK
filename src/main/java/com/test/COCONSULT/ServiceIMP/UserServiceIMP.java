@@ -73,7 +73,7 @@ UserServiceIMP implements UserServiceInterface {
         return user;
 
     }
-    public List<User> getAlluserprofiles() {
+   /* public List<User> getAlluserprofiles() {
         List<User> users = userRepository.findAll();
         List<User> userslist =new ArrayList<>();
 
@@ -90,7 +90,7 @@ UserServiceIMP implements UserServiceInterface {
         }
 
         return userslist;
-    }
+    }*/
 
 
     public void bloqueUser(Long id) {

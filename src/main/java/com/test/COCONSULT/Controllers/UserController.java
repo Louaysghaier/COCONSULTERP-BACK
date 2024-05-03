@@ -70,11 +70,11 @@ UserServiceIMP userServiceIMP;
     public ResponseEntity<?> forgetPasswordbyemail(@PathVariable("email") String email, @RequestBody ResetPass resetPass) {
         return userServiceIMP.updatePasswordBymail(email,resetPass);
     }
-    @GetMapping("/Alluserprofiles/")
+   /* @GetMapping("/Alluserprofiles/")
 
     public List<User> getAlluserprofiles() {
         return userServiceIMP.getAlluserprofiles();
-    }
+    }*/
     @GetMapping("/getuserbyid/{id}")
     public User getUserById(@PathVariable("id") Long id) {
         return userServiceIMP.getUserById(id);}
