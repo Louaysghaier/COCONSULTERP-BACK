@@ -31,7 +31,7 @@ public class CorsConfig implements CorsConfigurationSource {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         // Register common CORS configuration for all relevant endpoints
-        source.registerCorsConfiguration("/ws/**", commonConfig);
+        source.registerCorsConfiguration("ws", commonConfig);
         source.registerCorsConfiguration("/api/**", commonConfig);
         source.registerCorsConfiguration("/Msg/**", commonConfig);
         source.registerCorsConfiguration("/**", commonConfig);

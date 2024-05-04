@@ -4,7 +4,11 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,9 +32,16 @@ public class User {
     private boolean valid;
     private String token;
     private boolean bannedchatGP;
-    private String image;
+  //  private Date joinDate;
+  //  private double soldeConge;
+    private String exp;
+    private byte[] image;
     private boolean addedtoGPChat;
-
+   /* private Boolean disponible = false;
+    private LocalDateTime signInTime;
+    private LocalDateTime signOutTime;
+    private Long sessionDuration;*/
+    private LocalDateTime createdDate;
     @ToString.Exclude
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
@@ -48,6 +59,9 @@ public class User {
     private Set <Role> roles = new HashSet<>();
 
 
+
+
+
     public User(String name, String username, String email, String password, boolean blocked, String address, boolean valid) {
 
         this.name = name;
@@ -59,6 +73,15 @@ public class User {
         this.valid = valid;
 
     }
+   /* public void addMonthlyConge() {
+        Date currentDate = new Date();
+        long diffInMillies = Math.abs(currentDate.getTime() - joinDate.getTime());
+        long diffInMonths = (diffInMillies / (1000 * 60 * 60 * 24 * 30));
+
+        // Removed the multiplication by diffInMonths
+        double additionalConge = 1.5;
+        soldeConge += additionalConge;
+    }*/
 
 
 }
