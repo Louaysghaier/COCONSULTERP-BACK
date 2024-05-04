@@ -74,24 +74,6 @@ UserServiceIMP implements UserServiceInterface {
         return user;
 
     }
-    public List<User> getAlluserprofiles() {
-        List<User> users = userRepository.findAll();
-        List<User> userslist =new ArrayList<>();
-
-        for (User user : users) {
-            // Extract only the image name without the path
-            String imageName = user.getImage().substring(user.getImage().lastIndexOf("\\") + 1);
-            List<String> matchingImagePaths = localFileStorageService.getMatchingImagePaths(Collections.singletonList(imageName));
-
-            if (!matchingImagePaths.isEmpty()) {
-                // Assuming there's only one matching image for each theme
-                user.setImage(matchingImagePaths.get(0));
-                userslist.add(user);
-            }
-        }
-
-        return userslist;
-    }
 
 
     public void bloqueUser(Long id) {
@@ -197,7 +179,7 @@ UserServiceIMP implements UserServiceInterface {
         }
 
     }
-    public ResponseEntity<User> registerUser(User user1, String roleName) {
+  public ResponseEntity<User> registerUser(User user1, String roleName) {
         if (userRepository.existsByUsername(user1.getUsername())) {
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
@@ -209,27 +191,21 @@ UserServiceIMP implements UserServiceInterface {
         Role userRole = roleRepository.findByName(RoleName.valueOf(roleName.trim()))
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(userRole);
-        // Création d'une instance de LocalDate représentant la date actuelle
-        LocalDate currentDate = LocalDate.now();
-
-        // Définition de la date de création de l'utilisateur
-        user.setCreatedDate(currentDate);
-
         user.setRoles(roles);
-        user.setValid(false);
-        user.setAddress(user1.getAddress());
-        user.setNumber(user1.getNumber());
+        user.setJoinDate(Date.from(new Date().toInstant()));
+       user.setSoldeConge(1.5);
+        user.setValid(true);
         User suser = userRepository.save(user);
         if (suser != null) {
             //String Newligne = System.getProperty("line.separator");
             String url = "http://localhost:4200/#/verification" ;
-            String verificationCode = otpInterface.GenerateOTp().getIdentification(); // Replace with your actual verification code
+            String verificationCode = "TN1122"; // Replace with your actual verification code
             String newLine = "<br/>"; // HTML line break
             String htmlMessage = "<div style='border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;'>"
                     + "Soyez le bienvenue dans notre plateforme" + newLine
                     + "Veuillez utiliser ce lien pour vous authentifier : " + newLine
                     + "<a href='" + url + "'>" + url + "</a>" + newLine
-                    + "<strong>Verification Code ! max 5 min ! :</strong> " + verificationCode + newLine
+                    + "<strong>Verification Code:</strong> " + verificationCode + newLine
                     + "</div>";
             try {
                 mailSending.send(user.getEmail(), "Welcome"+ user.getName() , htmlMessage);
@@ -243,6 +219,7 @@ UserServiceIMP implements UserServiceInterface {
         }
 
     }
+
 
     public ResponseEntity<User> registerEntreprise(User user1) {
         if (userRepository.existsByUsername(user1.getUsername())) {
@@ -365,7 +342,25 @@ public ResponseEntity<?> userforgetpassword(String email) {
 
         }
     }
+   /* public List<User> getAlluserprofiles() {
+        List<User> users = userRepository.findAll();
+        List<User> userslist =new ArrayList<>();
 
+        for (User user : users) {
+            // Extract only the image name without the path
+            String imageName = user.getImage().substring(user.getImage().lastIndexOf("\\") + 1);
+            List<String> matchingImagePaths = localFileStorageService.getMatchingImagePaths(Collections.singletonList(imageName));
+
+            if (!matchingImagePaths.isEmpty()) {
+                // Assuming there's only one matching image for each theme
+                user.setImage(matchingImagePaths.get(0));
+                userslist.add(user);
+            }
+        }
+
+        return userslist;
+    }
+*/
 }
 
 
