@@ -4,7 +4,7 @@ package com.test.COCONSULT.DTO;
 public enum RoleName {
     ROLE_USER,
     ADMIN,
-    Entreprise,
+   Entreprise,
     Employee,
     Manager,
     HR,

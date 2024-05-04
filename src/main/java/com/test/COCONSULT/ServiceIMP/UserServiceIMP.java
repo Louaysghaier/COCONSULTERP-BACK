@@ -123,7 +123,7 @@ UserServiceIMP implements UserServiceInterface {
         roles.add(userRole);
         user.setRoles(roles);
         user.setJoinDate(Date.from(new Date().toInstant()));
-       user.setSoldeConge(21.0);
+       user.setSoldeConge(1.5);
         user.setValid(true);
         User suser = userRepository.save(user);
         if (suser != null) {
@@ -150,7 +150,7 @@ UserServiceIMP implements UserServiceInterface {
 
     }
 
-    public ResponseEntity<User> registerEntreprise(User user1) {
+  public ResponseEntity<User> registerEntreprise(User user1) {
         if (userRepository.existsByUsername(user1.getUsername())) {
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }

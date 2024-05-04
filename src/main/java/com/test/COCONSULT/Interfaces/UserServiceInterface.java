@@ -29,7 +29,7 @@ public interface UserServiceInterface {
 
     public ResponseEntity<User> registerUser(User user1, String roleName);
 
-    public ResponseEntity<User> registerEntreprise(User user1);
+  //  public ResponseEntity<User> registerEntreprise(User user1);
 
 
 

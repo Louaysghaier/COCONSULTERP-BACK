@@ -90,8 +90,8 @@ public class SalaireServiceIMP implements SalaireServiceInterface {
         RoleName[] roles = RoleName.values();
 
         for (RoleName roleName : roles) {
-            Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new RuntimeException("Fail! -> Cause: Role " + roleName + " not found."));
+            Role role = roleRepository.findByName(roleName).orElse(null)
+                  ;
             List<User> users = userRepository.findByRolesContains(role);
 
             for (User user : users) {

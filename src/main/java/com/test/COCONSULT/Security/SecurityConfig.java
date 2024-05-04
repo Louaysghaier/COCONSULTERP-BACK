@@ -20,7 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-   private CorsConfigurationSource corsConfigurationSource;
+    private CorsConfig corsConfigurationSource;
 
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {

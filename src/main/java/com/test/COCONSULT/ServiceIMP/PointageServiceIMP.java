@@ -8,6 +8,7 @@ import com.test.COCONSULT.Reposotories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,28 +21,30 @@ public class PointageServiceIMP implements PointageServiceInterface {
 
     @Autowired
     private UserRepository userRepository;
-    @Override
-    public void addPointage(Pointage pointage) {
 
-        pointage.setDateEntr(Date.from(new Date().toInstant()));
-        pointageRepository.save(pointage);
-        // Retrieve the User entity
-        User user = userRepository.findById(pointage.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public void addPointageForUser(long userId) {
+        // Create a new Pointage instance
+        Pointage pointage = new Pointage();
+        pointage.setDateEntr(Date.from(Instant.now())); // Set the current time as the entry date
+        // Retrieve the User entity by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        pointage.setUser(user);
 
+        // Get or initialize the pointages set
         Set<Pointage> setPointages = user.getPointages();
-
         if (setPointages == null) {
             setPointages = new HashSet<>();
         }
 
+        // Add the new pointage to the set
         setPointages.add(pointage);
-
         user.setPointages(setPointages);
 
+        // Save the pointage to pointage repository
+        pointageRepository.save(pointage);
+        // Save the updated user to user repository
         userRepository.save(user);
-
-
     }
 
     @Override

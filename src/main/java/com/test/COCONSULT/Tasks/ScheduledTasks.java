@@ -102,7 +102,7 @@ public class ScheduledTasks {
         return sessionDurationLastMonth;
     }
 
-    @Scheduled(cron = "15 0 0 1 * *")
+    @Scheduled(cron = "30 0 0 1 * *")
     public void addSalaire() {
         salaireServiceIMP.addSalaireToAllUsers();
     }

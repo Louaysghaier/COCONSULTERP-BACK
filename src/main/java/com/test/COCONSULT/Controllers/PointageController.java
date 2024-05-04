@@ -8,6 +8,7 @@ import com.test.COCONSULT.Reposotories.UserRepository;
 import com.test.COCONSULT.ServiceIMP.PointageServiceIMP;
 import com.test.COCONSULT.Services.MailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -32,9 +33,14 @@ public class PointageController {
     @Autowired
     RappelPointageRepository rappelPointageRepository;
 
-    @PostMapping("/add-pointage")
-    public void addPointage(@RequestBody Pointage p) {
-        pointageServiceIMP.addPointage(p);
+    @PostMapping("/users/{userId}/pointage/add")
+    public ResponseEntity<?> addPointageForUser(@PathVariable("userId") long userId) {
+        try {
+            pointageServiceIMP.addPointageForUser(userId);
+            return ResponseEntity.ok("Pointage added successfully for user ID: " + userId);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     private String generateVerificationCode() {
