@@ -169,29 +169,26 @@ public class PDFGenerationService implements IpdfContarct {
                 contentStream.drawImage(signatureImageLeft, 50, 50, 100, 50);
                 contentStream.drawImage(signatureImageRight, page.getMediaBox().getWidth() - 150, 50, 100, 50);*/
             }
-            Optional<Contract> contractOptional = contractRepository.findById(contractId);
+            //Optional<Contract> contractOptional = contractRepository.findById(contractId);
             // Saving the pdf as a physical file that can be accessed later in path: filePAth
             String filename = "contract_" + formattedDate + "_" + nanoTime + ".pdf";
             String filePath = "C:/Users/MSI/Desktop/4éme SE (Esprit)/SEM2/PI/COCONSULTERP-BACK/src/main/resources/uploads/" + filename;
             File outputFile = new File(filePath);
-            if (contractOptional.isPresent()) {
-                Contract contract1 = contractOptional.get();
+          //  if (contract.isPresent()) {
+                Contract contract1 = contract.get();
 
                 // Setting the description
                 contract1.setDescription(filename);
                 contractRepository.save(contract1);
-            }
+            //}
 
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 document.save(outputStream);
-
-
-                }
+            }
 
             try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
                 document.save(byteArrayOutputStream);
-                return byteArrayOutputStream.toByteArray
-                        ();
+                return byteArrayOutputStream.toByteArray();
             }
         }
     }

@@ -34,38 +34,10 @@ public class Contract {
     @ElementCollection
     private List<Boolean> installmentPaid;
 
-
-    public List<Boolean> getInstallmentPaid() {
-        return installmentPaid;
-    }
-
-    public void setInstallmentPaid(List<Boolean> installmentPaid) {
-        this.installmentPaid = installmentPaid;
-    }
-
-
-
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "repertoire_id")
-    private Repertoire repertoire;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Repertoire> repertoires = new ArrayList<>(); // Initialize the list
+
 
     private String repertoireContact;
-
-    public String getRepertoireContact() {
-        return repertoireContact;
-    }
-
-    public void setRepertoireContact(String repertoireContact) {
-        this.repertoireContact = repertoireContact;
-    }
-
-   /* @JsonIgnore
-    // Initialize invoices list with an empty ArrayList
-    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-    private List<Invoice> invoices = new ArrayList<>();*/
-
-
-
-
 }

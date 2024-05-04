@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class Repertoire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,15 +33,9 @@ public class Repertoire {
 
     private String email ;
 
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "repertoire", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "repertoires")
     private List<Contract> contracts;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "Repertoireee", cascade = CascadeType.ALL)
     private List<ActivitySalesTeam> Activities ;
-
-
-
 }

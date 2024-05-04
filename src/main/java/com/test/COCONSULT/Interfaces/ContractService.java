@@ -7,7 +7,7 @@ import com.test.COCONSULT.Entity.Repertoire;
 import java.util.List;
 
 public interface ContractService {
-    List<Contract> retrieveContract();
+    List<Contract> retrieveContracts();
     Contract updateContract(Contract contract);
     Contract addContract(Contract contract) ;
     Contract addContractAffectRep(Contract contract, Long repertoireId) ;

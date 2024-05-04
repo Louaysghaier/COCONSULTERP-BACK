@@ -27,10 +27,11 @@ public class ContarctController{
 
 
     @GetMapping("/GetAllContract")
-    public ResponseEntity<List<Contract>> retrieveContract() {
-        List<Contract> ContractList = contractService.retrieveContract();
-        return ResponseEntity.ok(ContractList);
+    public ResponseEntity<List<Contract>> retrieveAllContracts() {
+        List<Contract> contractList = contractService.retrieveContracts();
+        return ResponseEntity.ok(contractList);
     }
+
 
     @GetMapping("/GetContractByID/{id}")
     public ResponseEntity<Contract> retrieveContract(@PathVariable("id") Long idContract ) {
@@ -48,7 +49,7 @@ public class ContarctController{
     }
 
     @PostMapping("/ajouterContract/{repertoireId}")
-    public ResponseEntity<Contract> addContrat(@RequestBody Contract contract, @PathVariable Long repertoireId) {
+    public ResponseEntity<Contract> addContract(@RequestBody Contract contract, @PathVariable Long repertoireId) {
         Contract addedContract = contractService.addContractAffectRep(contract, repertoireId);
         if (addedContract != null) {
             return ResponseEntity.ok(addedContract);
@@ -68,6 +69,7 @@ public class ContarctController{
             return ResponseEntity.notFound().build();
         }
     }
+
 
 
     @PutMapping("/updateContract/{id}")

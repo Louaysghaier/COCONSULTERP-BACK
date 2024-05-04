@@ -6,6 +6,7 @@ import com.test.COCONSULT.Entity.Payment;
 import com.test.COCONSULT.Interfaces.ContractService;
 import com.test.COCONSULT.Interfaces.PaymentService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,8 +69,23 @@ public class PaymentController {
 
     @GetMapping("/verifyPayments")
     public List<ContractVerificationResult> verifyPayments() {
-        List<Contract> contracts = contractService.retrieveContract();
+        List<Contract> contracts = contractService.retrieveContracts();
         List<Payment> payments = paymentService.retrievePayment();
         return paymentService.verifyPayments(contracts, payments);
     }
+
+    @GetMapping("/daily")
+    public ResponseEntity<Map<LocalDate, Double>> getDailySales() {
+        try {
+            List<Payment> payments = paymentService.retrievePayment();
+            Map<LocalDate, Double> dailySales = paymentService.calculateDailySales(payments);
+            return ResponseEntity.ok(dailySales);
+        } catch (Exception e) {
+            // Handle any exceptions and return an error response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
+
 }

@@ -13,9 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -103,6 +102,29 @@ public class PaymentServiceImpl implements PaymentService {
 
         return verificationResults;
     }
+
+
+    @Override
+    public Map<LocalDate, Double> calculateDailySales(List<Payment> payments) {
+        // Create a map to store the daily sales
+        Map<LocalDate, Double> dailySales = new HashMap<>();
+
+        // Iterate through the list of payments
+        for (Payment payment : payments) {
+            // Get the payment date
+            LocalDate paymentDate = payment.getPaymentDate();
+
+            // Get the amount of the payment
+            double amount = payment.getAmount();
+
+            // Update the daily sales map
+            dailySales.put(paymentDate, dailySales.getOrDefault(paymentDate, 0.0) + amount);
+        }
+
+        return dailySales;
+    }
+
+
 
 
 }

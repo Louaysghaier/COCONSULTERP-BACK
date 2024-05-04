@@ -5,22 +5,27 @@ import com.test.COCONSULT.Entity.Repertoire;
 import com.test.COCONSULT.Interfaces.ContractService;
 import com.test.COCONSULT.Reposotories.ContractRepository;
 import com.test.COCONSULT.Reposotories.RepertoireRepository;
-import io.swagger.v3.oas.annotations.security.OAuthScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 @Service
-
 public class ContractServiceImpl implements ContractService {
-    @Autowired ContractRepository contractRepository ;
-    @Autowired RepertoireRepository repertoireRepository ;
+
+    @Autowired
+    private ContractRepository contractRepository;
+
+    @Autowired
+    private RepertoireRepository repertoireRepository;
 
     @Override
-    public List<Contract> retrieveContract() { return contractRepository.findAll() ; }
+    public List<Contract> retrieveContracts() {
+        return contractRepository.findAll();
+    }
 
     @Override
     public Contract updateContract(Contract contract) {
@@ -31,11 +36,12 @@ public class ContractServiceImpl implements ContractService {
     public Contract addContract(Contract contract) {
         return contractRepository.save(contract);
     }
+
     @Override
     public Contract addContractAffectRep(Contract contract, Long repertoireId) {
         Repertoire repertoire = repertoireRepository.findById(repertoireId).orElse(null);
         if (repertoire != null) {
-            contract.setRepertoire(repertoire);
+            contract.getRepertoires().add(repertoire); // Add the repertoire to the list of repertoires associated with the contract
             // Automatically set repertoireContact to the Contact attribute of Repertoire
             contract.setRepertoireContact(repertoire.getContact());
 
@@ -62,68 +68,38 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public Contract updateContractAffectRep(Contract updatedContract, Long contractId, Long repertoireId) {
-        // Retrieve the existing contract from the database
         Optional<Contract> optionalContract = contractRepository.findById(contractId);
 
         if (optionalContract.isPresent()) {
             Contract existingContract = optionalContract.get();
-
-            // Update contract details with the new values
+            // Update contract details
             existingContract.setDescription(updatedContract.getDescription());
             existingContract.setDateContract(updatedContract.getDateContract());
-            existingContract.setMontant(updatedContract.getMontant());
-            existingContract.setNbreTranche(updatedContract.getNbreTranche());
-            existingContract.setEtape(updatedContract.getEtape());
             // Update other fields as needed
 
-            // Update the associated repertoire
+            // Retrieve the repertoire
             Repertoire repertoire = repertoireRepository.findById(repertoireId).orElse(null);
             if (repertoire != null) {
-                existingContract.setRepertoire(repertoire);
-                // Automatically set repertoireContact to the Contact attribute of Repertoire
-                existingContract.setRepertoireContact(repertoire.getContact());
+                existingContract.getRepertoires().add(repertoire);
             }
-
-            // Save the updated contract
             return contractRepository.save(existingContract);
         } else {
-            // Contract with the given ID not found
             return null;
         }
     }
 
-
-
-    @Override
-    public Contract retrieveContract(Long idContract) {
-        Optional<Contract> ContractOptional = contractRepository.findById(idContract);
-        return ContractOptional.orElse(null);
-    }
-
-    @Override
-    public String getRepertoireContactByContractId(Long idContract) {
-
-        Optional<Contract> optionalContract = contractRepository.findById(idContract);
-        if (optionalContract.isPresent()) {
-            Contract contract = optionalContract.get();
-            Repertoire repertoire = contract.getRepertoire();
-            if (repertoire != null) {
-                return repertoire.getContact();
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
 
     @Override
     public List<Contract> retrieveContractsWithRepertoireContact() {
         List<Contract> contracts = contractRepository.findAll();
 
-        // Populate repertoireContact for each contract
         for (Contract contract : contracts) {
-            String repertoireContact = getRepertoireContactByContractId(contract.getIdContract());
+            // Populate repertoireContact for each contract
+            StringBuilder sb = new StringBuilder();
+            for (Repertoire repertoire : contract.getRepertoires()) {
+                sb.append(repertoire.getContact()).append(", ");
+            }
+            String repertoireContact = sb.toString();
             contract.setRepertoireContact(repertoireContact);
         }
 
@@ -131,7 +107,35 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void removeContract(Long idContract) {
-        contractRepository.deleteById(idContract);
+    public Contract retrieveContract(Long idContract) {
+        Optional<Contract> contractOptional = contractRepository.findById(idContract);
+        return contractOptional.orElse(null);
     }
+
+    @Override
+    public String getRepertoireContactByContractId(Long idContract) {
+        Optional<Contract> optionalContract = contractRepository.findById(idContract);
+        if (optionalContract.isPresent()) {
+            Contract contract = optionalContract.get();
+            StringBuilder sb = new StringBuilder();
+            for (Repertoire repertoire : contract.getRepertoires()) {
+                sb.append(repertoire.getContact()).append(", ");
+            }
+            return sb.toString();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void removeContract(Long idContract) {
+        Optional<Contract> optionalContract = contractRepository.findById(idContract);
+            Contract contract = optionalContract.get();
+            contract.setRepertoires(null);
+            contractRepository.save(contract);
+
+            contractRepository.deleteById(idContract);
+
+    }
+
 }
