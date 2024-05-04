@@ -46,11 +46,24 @@ public class LocalFileStorageService implements FileStorageService {
                     if (file.isFile()) {
                         String fullFileName = file.getName();
                         String[] parts = fullFileName.split("_"); // Split the filename based on underscore
-                        if (parts.length == 2) {
-                            String actualFileName = parts[1]; // Extract the actual filename
-                            if (databaseImageNames.get(0).contains(actualFileName)) {
+                        //if (parts.length == 2) {
+                        String actualFileName = "" ;
+                        for ( int i = 1; i < parts.length; i++) {
+                             actualFileName += parts[i] ; // Extract the actual filename
+                             actualFileName += '_';
+                        }
+
+                        // Check if the file name ends with an underscore
+                        if (actualFileName.endsWith("_")) {
+                            // Remove the last character (underscore)
+                            actualFileName = actualFileName.substring(0, actualFileName.length() - 1);
+
+                        }
+
+
+                        if (databaseImageNames.get(0).contains(actualFileName.toString())) {
                                 matchingImagePaths.add(file.getAbsolutePath());
-                            }
+                                break;
                         }
                     }
                 }
