@@ -25,7 +25,7 @@ public class FileStorageController {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @GetMapping("/images/{imageName:.+}")
+   /* @GetMapping("/images/{imageName:.+}")
     public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
         // Extract the actual filename from the request path
        // String actualFileName = imageName.substring(imageName.indexOf("_") + 1);
@@ -58,7 +58,7 @@ public class FileStorageController {
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("image not uploaded");
         }
-    }
+    }*/
 
 
        // @PostMapping("/uploadpdf")
