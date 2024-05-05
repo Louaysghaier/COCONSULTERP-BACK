@@ -40,8 +40,12 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Contract addContractAffectRep(Contract contract, Long repertoireId) {
         Repertoire repertoire = repertoireRepository.findById(repertoireId).orElse(null);
+        List<Repertoire> myrepo=new ArrayList<>();
+
         if (repertoire != null) {
-            contract.getRepertoires().add(repertoire); // Add the repertoire to the list of repertoires associated with the contract
+            myrepo.add(repertoire);
+            contract.setRepertoires(myrepo);
+           // contract.getRepertoires().add(repertoire); // Add the repertoire to the list of repertoires associated with the contract
             // Automatically set repertoireContact to the Contact attribute of Repertoire
             contract.setRepertoireContact(repertoire.getContact());
 

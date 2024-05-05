@@ -1,6 +1,7 @@
 package com.test.COCONSULT.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.test.COCONSULT.DTO.EtapeContract;
 
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+//@JsonIgnoreProperties(ignoreUnknown = true)
+
 @Getter
 @Setter
 @ToString
@@ -27,7 +30,7 @@ public class Contract {
     private double Montant ;
     private int NbreTranche ;
     private String referenceContract;
-
+    //private  Long repertoireId;
     @Enumerated(EnumType.STRING)
     private EtapeContract Etape ;
 

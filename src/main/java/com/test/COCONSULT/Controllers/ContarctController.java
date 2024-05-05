@@ -120,9 +120,6 @@ public class ContarctController{
                 headers.setContentDispositionFormData("filename", "contract.pdf");
                 return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 
-
-
-
             } catch (IOException e) {
                 // Handle PDF generation error
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
