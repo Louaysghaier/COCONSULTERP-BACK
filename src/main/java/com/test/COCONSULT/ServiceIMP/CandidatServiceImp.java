@@ -8,16 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.MessagingException;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -133,7 +124,12 @@ public class CandidatServiceImp implements CandidatServiceInterface {
         }
         return false; // Le candidat n'existe pas
     }
-
+    public void deleteCandidatDetails(int candidatId) {
+        // Implement deletion logic here, such as using a repository to delete by ID
+        candidatRepository.deleteById(candidatId);
+    }
 
 }
+
+
 

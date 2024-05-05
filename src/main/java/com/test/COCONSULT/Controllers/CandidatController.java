@@ -10,14 +10,9 @@ import com.test.COCONSULT.Reposotories.JobOpportRepository;
 import com.test.COCONSULT.ServiceIMP.CandidatServiceImp;
 import com.test.COCONSULT.ServiceIMP.CandidateNotificationService;
 import com.test.COCONSULT.Services.MailSenderService;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +21,6 @@ import com.test.COCONSULT.Entity.test;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -251,6 +239,15 @@ public class CandidatController {
 
         return ResponseEntity.ok(candidatDetailsDTOList);
     }
+    @DeleteMapping("/candidat-details/{candidatId}")
+    public ResponseEntity<String> deleteCandidatDetails(@PathVariable int candidatId) {
+        try {
+            candidatServiceImp.deleteCandidatDetails(candidatId); // Implement this method in your service
+            return ResponseEntity.ok("Candidat details deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting candidat details");
+        }
+    }
 
     @GetMapping("/{candidatId}/tests/{testId}")
     public ResponseEntity<Boolean> candidatHasTakenTest(@PathVariable int candidatId, @PathVariable test testId) {
@@ -269,10 +266,11 @@ public class CandidatController {
         return candidatServiceImp.aPasseTestByEmail(email);
     }
 
+
+
+
+
 }
-
-
-
 
 
 

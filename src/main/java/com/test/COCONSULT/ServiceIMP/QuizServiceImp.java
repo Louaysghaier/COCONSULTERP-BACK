@@ -1,5 +1,6 @@
 package com.test.COCONSULT.ServiceIMP;
 
+import com.test.COCONSULT.DTO.ReclamationDTO;
 import com.test.COCONSULT.Entity.Candidat;
 import com.test.COCONSULT.Entity.JobOpport;
 import com.test.COCONSULT.Entity.Qestion;
@@ -14,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -112,4 +115,7 @@ public class QuizServiceImp implements QuizServiceInterface {
         // Récupérer et retourner le quiz aléatoire
         return allQuizzes.get(randomIndex);
     }
+
+
+
 }

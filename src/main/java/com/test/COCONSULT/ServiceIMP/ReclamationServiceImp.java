@@ -1,5 +1,6 @@
 package com.test.COCONSULT.ServiceIMP;
 
+import com.test.COCONSULT.DTO.ReclamationDTO;
 import com.test.COCONSULT.Entity.Candidat;
 import com.test.COCONSULT.Entity.Reclamation;
 import com.test.COCONSULT.Reposotories.CandidatRepository;
@@ -8,16 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ReclamationServiceImp {
     @Autowired
     ReclamationRepository reclamationRepository;
-
+    @Autowired
     CandidatServiceImp candidatServiceImp;
     @Autowired
-CandidatRepository candidatRepository;
-
+    CandidatRepository candidatRepository;
 
 
     @Autowired
@@ -42,9 +47,21 @@ CandidatRepository candidatRepository;
         Reclamation reclamation = new Reclamation();
         reclamation.setContent(contenu);
         // Associer la réclamation au candidat
-        reclamation.getCandidat().add(candidat);
+        reclamation.setCandidat(candidat);
         reclamation = reclamationRepository.save(reclamation);
 
         return reclamation;
     }
+
+
+
+    @Transactional
+    public List<ReclamationDTO> getAllReclamationsWithCandidatNames() {
+        return reclamationRepository.findAllReclamationsWithCandidatNames();
+    }
+
+    public void deleteReclamationById(int id) {
+        reclamationRepository.deleteById(id);
+    }
 }
+

@@ -2,6 +2,8 @@ package com.test.COCONSULT.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.*;
@@ -43,6 +45,9 @@ private String info;
     @OneToMany(mappedBy="candidat",cascade = CascadeType.ALL)
 
     List<Entretien>  entretien= new ArrayList<>();
+    @OneToMany(mappedBy = "candidat"  )
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    List<Reclamation> reclamation= new ArrayList<>();
 
 
 

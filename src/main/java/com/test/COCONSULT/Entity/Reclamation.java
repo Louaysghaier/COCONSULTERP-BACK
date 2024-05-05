@@ -18,8 +18,8 @@ public class Reclamation {
     private int id_rec;
     private String content;
     @ToString.Exclude
-    @JsonIgnore
-    @ManyToMany
-    List<Candidat> candidat= new ArrayList<>();
+
+    @ManyToOne
+    Candidat candidat;
 
 }
