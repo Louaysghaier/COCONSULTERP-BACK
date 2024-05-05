@@ -108,7 +108,7 @@ public class ContarctController{
     }
 
 
-    @PostMapping("/ajouterContractAndGeneratePdf/{repertoireId}")
+    @PostMapping("/addContractAndGeneratePdf/{repertoireId}")
     public ResponseEntity<byte[]> addContractAndGeneratePdf(@RequestBody Contract contract, @PathVariable Long repertoireId) {
         Contract addedContract = contractService.addContractAffectRep(contract, repertoireId);
         if (addedContract != null) {
@@ -119,10 +119,6 @@ public class ContarctController{
                 // Optionally, you can set the filename in the response headers
                 headers.setContentDispositionFormData("filename", "contract.pdf");
                 return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-
-
-
-
             } catch (IOException e) {
                 // Handle PDF generation error
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -131,8 +127,8 @@ public class ContarctController{
             return ResponseEntity.notFound().build();
         }
     }
+    }
 
 
 
 
-}

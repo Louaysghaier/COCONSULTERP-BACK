@@ -1,6 +1,7 @@
 package com.test.COCONSULT.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.test.COCONSULT.DTO.Priorite;
 import com.test.COCONSULT.DTO.TypeContact;
 import lombok.*;
@@ -10,6 +11,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+//@JsonIgnoreProperties(ignoreUnknown = true)
+
 @Getter
 @Setter
 @ToString
@@ -38,4 +41,18 @@ public class Repertoire {
 
     @OneToMany(mappedBy = "Repertoireee", cascade = CascadeType.ALL)
     private List<ActivitySalesTeam> Activities ;
+
+    /*@Override
+    public String toString() {
+        return "Repertoire{" +
+                "idRepertoire=" + idRepertoire +
+                ", Contact='" + Contact + '\'' +
+                ", typeContact=" + typeContact +
+                ", priorite=" + priorite +
+                ", NumTel='" + NumTel + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }*/
+
+
 }

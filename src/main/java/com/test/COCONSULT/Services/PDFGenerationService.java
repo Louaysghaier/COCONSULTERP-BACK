@@ -17,6 +17,7 @@ import com.test.COCONSULT.Entity.Contract;
 
 import com.test.COCONSULT.Interfaces.IpdfContarct;
 import com.test.COCONSULT.Reposotories.ContractRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -36,6 +37,8 @@ public class PDFGenerationService implements IpdfContarct {
     private ContractRepository contractRepository ;
 
 
+    @Value("${file.upload-dir}/")
+    private String uploadDir;
 
 
     public byte[] generatePdf(Long contractId) throws IOException {
@@ -172,19 +175,24 @@ public class PDFGenerationService implements IpdfContarct {
             //Optional<Contract> contractOptional = contractRepository.findById(contractId);
             // Saving the pdf as a physical file that can be accessed later in path: filePAth
             String filename = "contract_" + formattedDate + "_" + nanoTime + ".pdf";
-            String filePath = "C:/Users/MSI/Desktop/4éme SE (Esprit)/SEM2/PI/COCONSULTERP-BACK/src/main/resources/uploads/" + filename;
-            File outputFile = new File(filePath);
-          //  if (contract.isPresent()) {
-                Contract contract1 = contract.get();
+            //String filePath = "C:/Users/MSI/Desktop/4éme SE (Esprit)/SEM2/PI/COCONSULTERP-BACK/src/main/resources/uploads/" + filename;
+            String filePath = uploadDir + filename;
 
-                // Setting the description
-                contract1.setDescription(filename);
-                contractRepository.save(contract1);
+            File outputFile = new File(filePath);
+            System.out.println("outputFile : " + outputFile);
+
+            //  if (contract.isPresent()) {
+            Contract contract1 = contract.get();
+
+            // Setting the description
+            contract1.setDescription(filename);
+            contractRepository.save(contract1);
             //}
 
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 document.save(outputStream);
             }
+
 
             try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
                 document.save(byteArrayOutputStream);
@@ -295,3 +303,4 @@ public class PDFGenerationService implements IpdfContarct {
         table.addCell("Generation");
     }*/
 }
+

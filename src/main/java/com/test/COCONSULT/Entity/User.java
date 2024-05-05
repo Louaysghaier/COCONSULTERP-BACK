@@ -33,7 +33,6 @@ public class User {
     private String image;
     private boolean addedtoGPChat;
 
-    @Column(nullable = false, updatable = false)
     @CreatedDate
     private LocalDate createdDate;
     @ToString.Exclude

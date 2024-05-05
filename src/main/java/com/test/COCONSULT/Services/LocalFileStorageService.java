@@ -49,8 +49,8 @@ public class LocalFileStorageService implements FileStorageService {
                         //if (parts.length == 2) {
                         String actualFileName = "" ;
                         for ( int i = 1; i < parts.length; i++) {
-                             actualFileName += parts[i] ; // Extract the actual filename
-                             actualFileName += '_';
+                            actualFileName += parts[i] ; // Extract the actual filename
+                            actualFileName += '_';
                         }
 
                         // Check if the file name ends with an underscore
@@ -62,8 +62,8 @@ public class LocalFileStorageService implements FileStorageService {
 
 
                         if (databaseImageNames.get(0).contains(actualFileName.toString())) {
-                                matchingImagePaths.add(file.getAbsolutePath());
-                                break;
+                            matchingImagePaths.add(file.getAbsolutePath());
+                            break;
                         }
                     }
                 }
@@ -74,4 +74,3 @@ public class LocalFileStorageService implements FileStorageService {
 
 
 }
-

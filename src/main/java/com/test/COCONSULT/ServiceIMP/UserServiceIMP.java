@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -208,6 +209,12 @@ UserServiceIMP implements UserServiceInterface {
         Role userRole = roleRepository.findByName(RoleName.valueOf(roleName.trim()))
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
         roles.add(userRole);
+        // Création d'une instance de LocalDate représentant la date actuelle
+        LocalDate currentDate = LocalDate.now();
+
+        // Définition de la date de création de l'utilisateur
+        user.setCreatedDate(currentDate);
+
         user.setRoles(roles);
         user.setValid(false);
         user.setAddress(user1.getAddress());
