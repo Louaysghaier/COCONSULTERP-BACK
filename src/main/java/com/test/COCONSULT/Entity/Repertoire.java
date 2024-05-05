@@ -1,6 +1,7 @@
 package com.test.COCONSULT.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.test.COCONSULT.DTO.Priorite;
 import com.test.COCONSULT.DTO.TypeContact;
 import lombok.*;
@@ -10,6 +11,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+//@JsonIgnoreProperties(ignoreUnknown = true)
+
 @Getter
 @Setter
 @ToString

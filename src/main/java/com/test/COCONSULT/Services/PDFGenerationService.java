@@ -174,12 +174,12 @@ public class PDFGenerationService implements IpdfContarct {
             String filename = "contract_" + formattedDate + "_" + nanoTime + ".pdf";
             String filePath = "C:/Users/MSI/Desktop/4éme SE (Esprit)/SEM2/PI/COCONSULTERP-BACK/src/main/resources/uploads/" + filename;
             File outputFile = new File(filePath);
-          //  if (contract.isPresent()) {
-                Contract contract1 = contract.get();
+            //  if (contract.isPresent()) {
+            Contract contract1 = contract.get();
 
-                // Setting the description
-                contract1.setDescription(filename);
-                contractRepository.save(contract1);
+            // Setting the description
+            contract1.setDescription(filename);
+            contractRepository.save(contract1);
             //}
 
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {

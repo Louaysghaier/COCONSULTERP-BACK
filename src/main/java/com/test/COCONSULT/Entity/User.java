@@ -4,7 +4,9 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +33,9 @@ public class User {
     private String image;
     private boolean addedtoGPChat;
 
+    @Column(nullable = true, updatable = false)
+    @CreatedDate
+    private LocalDate createdDate;
     @ToString.Exclude
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
