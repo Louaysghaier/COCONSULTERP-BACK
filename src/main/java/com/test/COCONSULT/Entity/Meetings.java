@@ -1,5 +1,6 @@
 package com.test.COCONSULT.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.test.COCONSULT.DTO.TypeMeet;
 import lombok.*;
@@ -20,14 +21,16 @@ public class Meetings implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMeeting;
-    private Timestamp dateMeeting;
+    private Date dateMeeting;
     @Enumerated(EnumType.STRING)
     private TypeMeet typeMeet;
     @ManyToOne
     @JsonIgnore
     private Projet projets;
+
+    @JsonIgnore
     @OneToMany
-    private Set<User> users;
+    private Set<Team> teams;
 
 
 }

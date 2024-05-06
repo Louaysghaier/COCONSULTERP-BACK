@@ -7,12 +7,16 @@ import com.test.COCONSULT.Interfaces.MeetingInterface;
 import com.test.COCONSULT.Reposotories.MeetingsRepository;
 import com.test.COCONSULT.Reposotories.ProjetRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
+import com.test.COCONSULT.Services.MailSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -23,6 +27,8 @@ public class MeetingServiceImp implements MeetingInterface {
     ProjetRepository projetRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    private MailSenderService mailSenderService;
 
 
     @Override
@@ -72,11 +78,48 @@ public class MeetingServiceImp implements MeetingInterface {
 
     @Override
     public void affecterUserAmeet(Integer idMeeting, String username) {
-        Meetings meetings=meetingsRepository.findMeetingsByIdMeeting(idMeeting);
-        User user=userRepository.findByUsername(username).orElse(null);
-        user.setMeetings(meetings);
+        // Find the meeting
+        Meetings meeting = meetingsRepository.findMeetingsByIdMeeting(idMeeting);
+        if (meeting == null) {
+            // Handle case where meeting is not found
+            // You may throw an exception or log an error
+            return;
+        }
 
+        // Find the user
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            // Handle case where user is not found
+            // You may throw an exception or log an error
+            return;
+        }
 
+        // Add the meeting to the user's meetings
+        user.getMeetings().add(meeting);
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getUsersByMeetingId(Integer idMeeting) {
+        return userRepository.findUsersByMeetingId(idMeeting);
+
+    }
+
+    @Override
+    public void sendMeetingAssignedEmail(Meetings meeting, String userEmail) {
+        String subject = "New Meeting Assigned: " + meeting.getTypeMeet();
+        String body = "Dear User,\n\n" +
+                "You have been assigned to a new meeting.\n\n" +
+                "Meeting Type: " + meeting.getTypeMeet() + "\n" +
+                "Meeting Date: " + meeting.getDateMeeting() + "\n\n" +
+                "Please use the following link to view the meeting details: http://localhost:4200/#/user_dashboard/MeetingsListe\n\n" +
+                "Regards,\nYour Company";
+
+        try {
+            mailSenderService.send(userEmail, subject, body);
+        } catch (Exception e) {
+            log.error("Error sending meeting assigned email: " + e.getMessage());
+        }
     }
 
 

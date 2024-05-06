@@ -2,8 +2,10 @@ package com.test.COCONSULT.ServiceIMP;
 
 import com.test.COCONSULT.Entity.Team;
 import com.test.COCONSULT.Entity.Tickets;
+import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.Interfaces.TeamInterface;
 import com.test.COCONSULT.Reposotories.TeamRepository;
+import com.test.COCONSULT.Reposotories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.List;
 public class TeamServiceImp implements TeamInterface {
 
     TeamRepository teamRepository;
+
+    UserRepository userRepository;
 
     @Override
     public Team addTeam(Team team) {
@@ -53,6 +57,27 @@ public class TeamServiceImp implements TeamInterface {
     @Override
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
+    }
+
+    @Override
+    public Team addTeamandaffecteruser(Team team, String username) {
+        User user=userRepository.findByUsername(username).orElse(null);
+        teamRepository.save(team);
+        user.setTeam(team);
+
+
+        return null;
+    }
+
+    @Override
+    public void affeteruserAteam(Integer idTeam, String username) {
+        Team team=teamRepository.findTeamByIdTeam(idTeam);
+        User user=userRepository.findByUsername(username).orElse(null);
+        user.setTeam(team);
+        teamRepository.save(team);
+
+
+
     }
 
 

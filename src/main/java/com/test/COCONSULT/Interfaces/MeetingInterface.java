@@ -1,6 +1,7 @@
 package com.test.COCONSULT.Interfaces;
 
 import com.test.COCONSULT.Entity.Meetings;
+import com.test.COCONSULT.Entity.User;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ public interface MeetingInterface {
 
     void affecterUserAmeet(Integer idMeeting, String username);
 
+    public List<User> getUsersByMeetingId(Integer idMeeting) ;
+
+    public void sendMeetingAssignedEmail(Meetings meeting, String userEmail) ;
 
 
 
@@ -36,4 +40,14 @@ public interface MeetingInterface {
 
 
 
-}
+
+
+
+
+
+
+
+
+
+
+    }

@@ -34,4 +34,9 @@ public class TeamControlleur {
     public List<Team> getAllTeams() {
         return teamInterface.getAllTeams();
     }
+
+    @PutMapping("/addTeamandaffecteruser/{username}")
+    public Team addTeamandaffecteruser(@RequestBody Team team,@PathVariable("username") String username) {
+        return teamInterface.addTeamandaffecteruser(team, username);
+    }
 }

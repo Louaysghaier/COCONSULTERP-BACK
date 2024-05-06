@@ -17,6 +17,11 @@ public interface TeamInterface {
 
     public List<Team> getAllTeams();
 
+    Team addTeamandaffecteruser(Team team, String username);
+
+    void affeteruserAteam(Integer idTeam, String username);
+
+
 
 
 
