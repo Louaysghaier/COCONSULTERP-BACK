@@ -61,11 +61,14 @@ public class User {
 
     private Set <Role> roles = new HashSet<>();
 
-    @ManyToOne
-    private Team team;
 
     @ManyToOne
-    private Meetings meetings;
+    @JsonIgnore
+    private Team team;
+
+    @ManyToMany
+    @JsonIgnore
+    private Set<Meetings> meetings;
 
 
 
@@ -85,6 +88,7 @@ public class User {
     @OneToMany
     @JsonIgnore
     private Set<Evaluation> evaluations;
+
 
 
 

@@ -32,10 +32,6 @@ UserServiceIMP userServiceIMP;
     public List<User> ListUser() {
         return userServiceIMP.getAllUser();
     }
-    @GetMapping("/getUserById/{idUser}")
-    public User getUserById(@PathVariable("idUser") Long idUser) {
-        return userServiceIMP.getUserById(idUser);
-    }
 
 
 
@@ -99,12 +95,4 @@ UserServiceIMP userServiceIMP;
     }
     */
 
-    @PutMapping("/affecterUseraTeam/{idUser}/{teamName}")
-    public void affecterUseraTeam(@PathVariable("idUser") Long idUser,@PathVariable("teamName") String teamName) {
-        userServiceIMP.affecterUseraTeam(idUser, teamName);
-    }
-    @PutMapping("/affecterTeamLeaderAteam/{username}/{teamName}")
-    public void affecterTeamLeaderAteam(@PathVariable("username") String username,@PathVariable("teamName") String teamName) {
-        userServiceIMP.affecterTeamLeaderAteam(username, teamName);
-    }
 }

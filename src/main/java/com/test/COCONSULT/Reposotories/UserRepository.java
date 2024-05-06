@@ -6,6 +6,7 @@ import com.test.COCONSULT.Entity.Role;
 import com.test.COCONSULT.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<Object[]> countUsersByRoles();
     //List<User> findByRolesContaining(Role );
 
-    User findUserById(Long id);
+    //User findUserById(Long id);
+    @Query("SELECT u FROM User u JOIN u.meetings m WHERE m.idMeeting = :idMeeting")
+    List<User> findUsersByMeetingId(@Param("idMeeting") Integer idMeeting);
 
     /*@Query("SELECT u FROM User u JOIN u.bilan b ORDER BY b.sum_total ASC")
     List<User> findUsersOrderByBilanSum_totalAsc();

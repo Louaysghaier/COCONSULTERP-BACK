@@ -43,7 +43,7 @@ public class Contract {
     private List<Repertoire> repertoires = new ArrayList<>(); // Initialize the list
 
 
-    private String repertoireContact;
+     private String repertoireContact;
 /*
     @Override
     public String toString() {

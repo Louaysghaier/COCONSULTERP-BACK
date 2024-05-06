@@ -42,9 +42,9 @@ public interface UserServiceInterface {
 
     public Optional<User> getCurrentUser() ;
 
-    void affecterUseraTeam(Long idUser, String teamName);
+   // void affecterUseraTeam(Long idUser, String teamName);
 
-    void affecterTeamLeaderAteam(String username, String teamName);
+    //void affecterTeamLeaderAteam(String username, String teamName);
 
 
 
