@@ -40,17 +40,17 @@
             User user = userRepository.findByUsername(username).orElse(null);
             ticketRepository.save(tick);
             tick.setUser(user);
-          /*  if (user != null) {
+            if (user != null) {
                 String messageBody = "Dear User,\n\n" + tick.getUser().getName()+" \n" +
                         "A new ticket has been assigned to you.\n\n" +
                         "Ticket Title: " + tick.getTickettitle() + "\n" +
                         "Priority: " + tick.getTicketPriority() + "\n" +
                         "Content: " + tick.getTicketContent() + "\n\n" +
                         "Regards,\nYour Company";
-                twilioService.sendSMS(user.getNumber(), messageBody);
+                twilioService.sendSMS("+21651775223", messageBody);
             }
 
-*/
+
             return ticketRepository.save(tick);
 
         }
