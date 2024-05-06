@@ -27,7 +27,7 @@ public class User {
     private String email;
     private String password;
     private String address;
-    private int number;
+    private String  number;
     private boolean blocked;
     private boolean valid;
     private String token;
@@ -60,6 +60,14 @@ public class User {
     //@JsonIgnore
 
     private Set <Role> roles = new HashSet<>();
+
+    @ManyToOne
+    private Team team;
+
+    @ManyToOne
+    private Meetings meetings;
+
+
 
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)

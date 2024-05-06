@@ -2,6 +2,7 @@ package com.test.COCONSULT.Interfaces;
 
 
 import com.test.COCONSULT.DTO.RoleName;
+import com.test.COCONSULT.Entity.Activity;
 import com.test.COCONSULT.Entity.User;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public interface UserServiceInterface {
 
     public void updateUser(Long id);
 
+
     public void validInscription(Long id) ;
 
     public ResponseEntity<User> registerUser(User user1, String roleName);
@@ -39,5 +41,12 @@ public interface UserServiceInterface {
 
 
     public Optional<User> getCurrentUser() ;
+
+    void affecterUseraTeam(Long idUser, String teamName);
+
+    void affecterTeamLeaderAteam(String username, String teamName);
+
+
+
 
 }
