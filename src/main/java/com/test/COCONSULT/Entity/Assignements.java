@@ -21,10 +21,10 @@ public class Assignements implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAssign;
 
-    @NotNull
+
     private LocalDate timeRecording;
 
-    @NotNull
+
     private Double expenses;
 
 

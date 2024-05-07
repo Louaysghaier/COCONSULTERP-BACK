@@ -20,13 +20,13 @@ public class TimeRecord implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTimeRec;
 
-    @NotNull
+
     private Double budget;
-    @NotNull
+
     private LocalDate date;
-    @NotNull
+
     private LocalDate duration;
-    @NotNull
+
     private String description;
 
     @JsonIgnore

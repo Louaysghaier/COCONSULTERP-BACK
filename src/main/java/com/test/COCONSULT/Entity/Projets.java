@@ -25,7 +25,7 @@ public class Projets implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProjet;
 
-    @NotNull
+
     @Size(min = 1, max = 255)
     private String projetTitle;
 
@@ -33,24 +33,23 @@ public class Projets implements Serializable
     private Double budget;
 
     private String Mail;
-    @NotNull
+
     private LocalDate dateDebut;
 
-    @NotNull
+
     @Future
     private LocalDate dateFin;
 
     @Positive
     private int effectif;
-    @NotNull
+
     private String description;
 
     private boolean isValid;
 
 
 
-    @Getter
-    @Setter
+
     @Lob
     private String pdfContent;
 

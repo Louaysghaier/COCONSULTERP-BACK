@@ -24,27 +24,27 @@ public class Quote implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idQuote;
 
-    @NotNull
+
     private String nom;
 
-    @NotNull
+
     private String prenom;
 
-    @NotNull
+
     @Positive
     private Double montant;
 
-    @NotNull
+
     private Date creationDate;
 
-    @NotNull
+
     @Future
     private Date expireDate;
 
-    @NotNull
+
     private String description;
 
-    @NotNull
+
     private boolean isValid;
 
 

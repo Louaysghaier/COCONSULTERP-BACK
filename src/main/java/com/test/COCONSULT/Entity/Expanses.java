@@ -21,16 +21,16 @@ public class Expanses implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idExps;
 
-    @NotNull
+
     private String category;
 
-    @NotNull
+
     private Double montant;
 
-    @NotNull
+
     private LocalDate date;
 
-    @NotNull
+
     private String description;
 
 

@@ -20,13 +20,12 @@ public class ProjFeed implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPjtFeed;
 
-    @NotNull
+
     private String content;
 
-    @NotNull
+
 
     private LocalDate timeUpd;
-    @NotNull
 
     private LocalDate fctsUpd;
 

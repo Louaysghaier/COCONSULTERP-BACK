@@ -115,5 +115,6 @@ private CandidatRepository candidatRepository;
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Gérer le cas où le candidat n'est pas trouvé
         }
     }
+
     }
 

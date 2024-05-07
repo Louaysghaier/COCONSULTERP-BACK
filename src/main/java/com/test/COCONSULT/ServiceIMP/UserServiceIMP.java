@@ -212,6 +212,7 @@ UserServiceIMP implements UserServiceInterface {
         user.setValid(false);
         user.setAddress(user1.getAddress());
         user.setNumber(user1.getNumber());
+       // user.setCreatedDate(new LocalDate( ));
         User suser = userRepository.save(user);
         if (suser != null) {
             //String Newligne = System.getProperty("line.separator");

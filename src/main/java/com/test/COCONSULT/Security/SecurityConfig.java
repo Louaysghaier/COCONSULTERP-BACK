@@ -18,12 +18,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 
 import javax.servlet.Filter;
 
 
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+
 import java.util.Arrays;
 
 @EnableWebSecurity
@@ -44,39 +47,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthEntryPoint jwtAuthEntryPoint;
     @Autowired
    private CorsConfig corsConfigurationSource;
+  /*  @Bean
+    public StandardServletMultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
+    }*/
 
 
 
-    private final String[] PUBLIC_ENDPOINTS={
-
-            "/api/auth/signup/employee",
-            "/api/auth/signIn",
-            "/api/works/sum_carbo_works",
-            "/api/Bilan/list-Bilan",
-            "/api/message/add-message",
-            "/api/message/list-message",
-            "/api/Solution/list-Solution",
-            "/api/Solution/add-solution",
-            "/api/works/sum_carbo_works",
-            "/api/user/validate-user/{idUser}",
-            "/api/user/list-user",
-            "/api/user/list-Userco2/ASC",
-            "/api/user/list-RolesName/{RolesName}",
-            "/api/user/validate-user/{iduser}",
-            "/api/user/delete-user/{iduser}",
-            "/api/user/getUser/{idUser}",
-            "/v2/api-docs",
-            "/configuration/ui",
-            "/-resources/**",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            "/swagger-ui/index.html",
-            "/swagger-resources",
-            "/configuration/security",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-             "/refreshToken"    };
     @Override
 
     protected void configure(HttpSecurity http) throws Exception {
@@ -85,6 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/Payment/upload-payments-data").permitAll()
+
                 .antMatchers("/api/auth/refreshToken").permitAll() // Permit access to refreshToken endpoint
                 .antMatchers("/**").permitAll()
                 .and()

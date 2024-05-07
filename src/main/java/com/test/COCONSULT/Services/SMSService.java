@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class SMSService {
 
     public static final String ACCOUNT_SID = "AC2cda61789a8672d673f7581c7a16e914";
-    public static final String AUTH_TOKEN = "";
+    public static final String AUTH_TOKEN = "7f78f5afff70529ed87753900e88083c";
 
     public void sendSms(String numeroDestinataire, String messageBody) {
         try {
