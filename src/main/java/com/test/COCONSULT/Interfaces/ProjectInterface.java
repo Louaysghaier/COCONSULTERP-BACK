@@ -1,16 +1,16 @@
 package com.test.COCONSULT.Interfaces;
 
-import com.test.COCONSULT.Entity.Projet;
+import com.test.COCONSULT.Entity.Projets;
 
 import java.util.List;
 
 public interface ProjectInterface {
 
-    Projet addProjet(Projet projet);
+    Projets addProjet(Projets projet);
 
-    public List<Projet> getAllProjets();
+    public List<Projets> getAllProjets();
 
 
-    Projet getProjetbyTitle(String projectTitle);
+    Projets getProjetbyTitle(String projectTitle);
 
 }

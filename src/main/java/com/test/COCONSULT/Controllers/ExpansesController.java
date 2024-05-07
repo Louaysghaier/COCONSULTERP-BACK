@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin
 public class ExpansesController {
 
-    private  ExpansesService expansesService;
+    private ExpansesService expansesService;
 
     @GetMapping("GetAllExpanses")
     public ResponseEntity<List<Expanses>> retrieveExpanses() {

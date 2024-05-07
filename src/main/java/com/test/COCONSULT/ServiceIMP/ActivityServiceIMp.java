@@ -1,10 +1,10 @@
 package com.test.COCONSULT.ServiceIMP;
 
 import com.test.COCONSULT.Entity.Activity;
-import com.test.COCONSULT.Entity.Projet;
+import com.test.COCONSULT.Entity.Projets;
 import com.test.COCONSULT.Interfaces.ActivityInterface;
 import com.test.COCONSULT.Reposotories.ActivityRepository;
-import com.test.COCONSULT.Reposotories.ProjetRepository;
+import com.test.COCONSULT.Reposotories.ProjetsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,11 @@ public class ActivityServiceIMp implements ActivityInterface {
     @Autowired
     ActivityRepository activityRepository;
     @Autowired
-    ProjetRepository projetRepository;
+    ProjetsRepository projetRepository;
 
     @Override
     public Activity addActivity(Activity Act, String projectTitle) {
-        Projet projet=projetRepository.getProjetByProjectTitle(projectTitle);
+        Projets projet=projetRepository.getProjetByProjetTitle(projectTitle);
         activityRepository.save(Act);
         Act.setProjet(projet);
         return activityRepository.save(Act);

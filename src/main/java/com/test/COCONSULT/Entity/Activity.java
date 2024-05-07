@@ -23,7 +23,7 @@ public class Activity implements Serializable {
     @Enumerated(EnumType.STRING)
     private ActivityType taskType;
     @ManyToOne
-    private Projet projet;
+    private Projets projet;
     @ManyToMany(mappedBy = "activitys")
     @JsonIgnore
     private Set<Tickets> tickets;

@@ -48,10 +48,6 @@ public class Projets implements Serializable
     private boolean isValid;
 
 
-   /* @AssertTrue(message = "La date de fin doit être ultérieure à la date de début")
-    public boolean isDateFinSupDateDebut() {
-        return dateFin.isAfter(dateDebut);
-    }*/
 
     @Getter
     @Setter

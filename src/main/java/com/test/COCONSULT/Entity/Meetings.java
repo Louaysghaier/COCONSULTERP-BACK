@@ -26,7 +26,7 @@ public class Meetings implements Serializable {
     private TypeMeet typeMeet;
     @ManyToOne
     @JsonIgnore
-    private Projet projets;
+    private Projets projets;
 
     @JsonIgnore
     @OneToMany

@@ -13,6 +13,7 @@ public interface ProjetsRepository extends JpaRepository<Projets, Long> {
     @Query("SELECT p.projetTitle FROM Projets p")
     List<String> findAllProjectTitles();
     List<Projets> findByDateDebutBetween(LocalDate dateDebut, LocalDate dateFin);
+    Projets getProjetByProjetTitle(String projectTitle);
 
 
 }

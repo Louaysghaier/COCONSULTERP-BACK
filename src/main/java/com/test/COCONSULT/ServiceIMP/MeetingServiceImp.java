@@ -1,11 +1,11 @@
 package com.test.COCONSULT.ServiceIMP;
 
 import com.test.COCONSULT.Entity.Meetings;
-import com.test.COCONSULT.Entity.Projet;
+import com.test.COCONSULT.Entity.Projets;
 import com.test.COCONSULT.Entity.User;
 import com.test.COCONSULT.Interfaces.MeetingInterface;
 import com.test.COCONSULT.Reposotories.MeetingsRepository;
-import com.test.COCONSULT.Reposotories.ProjetRepository;
+import com.test.COCONSULT.Reposotories.ProjetsRepository;
 import com.test.COCONSULT.Reposotories.UserRepository;
 import com.test.COCONSULT.Services.MailSenderService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,7 +21,7 @@ public class MeetingServiceImp implements MeetingInterface {
     @Autowired
     MeetingsRepository meetingsRepository;
     @Autowired
-    ProjetRepository projetRepository;
+    ProjetsRepository projetRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -65,7 +62,7 @@ public class MeetingServiceImp implements MeetingInterface {
 
     @Override
     public Meetings addMeetingandAffecteraunprojet(Meetings meet, String projectTitle) {
-        Projet projet=projetRepository.getProjetByProjectTitle(projectTitle);
+        Projets projet=projetRepository.getProjetByProjetTitle(projectTitle);
         meetingsRepository.save(meet);
         meet.setProjets(projet);
         return meetingsRepository.save(meet);
